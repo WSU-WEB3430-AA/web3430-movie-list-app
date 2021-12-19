@@ -1,0 +1,8 @@
+$primary: #8540f5;
+$danger: #d63384;
+$box-shadow: 0 .5rem 1rem rgba($primary, .5);
+@import '~bootstrap/scss/bootstrap';
+
+.half-rounded-box {
+  border-radius: 2rem 0 2rem 0;
+}
