@@ -3,7 +3,25 @@ import { List, Movie } from '../models/movie_lists'
 // GET /api/movie_lists/:lid/movies
 export const allMovieListMoviesAPI = (req, res, next) => {
   List.findOne({$and: [{_id: req.params.lid}, {$or:[{public: true}, {owner: req.user?._id}]}]}).populate('movies').exec().then(list=> {
-    res.write(JSON.stringify({list: {id: list.id, title: list.title}, movies: list.movies}))
+    let results = []
+    for(let movie of list.movies){
+      let editable = req.user?._id.toHexString() === movie.addedBy.toHexString()
+      results.push({doc: movie, editable})
+    }
+    res.write(JSON.stringify({list: {id: list.id, title: list.title}, movies: results}))
+    res.end()
+  }).catch(err => {
+    res.json({success: false, message: "Query failed"})
+    res.end()
+  })
+}
+
+// GET /api/movie_lists/:lid/addable_movies
+export const allMoviesNotInMovieLisAPI = (req, res, next) => {
+  List.findOne({$and: [{_id: req.params.lid}, {$or:[{public: true}, {owner: req.user?._id}]}]}).exec().then(async list=> {
+    let addables = await Movie.find({_id: {$nin: list.movies}})
+
+    res.write(JSON.stringify({list: {id: list.id, title: list.title}, movies: addables}))
     res.end()
   }).catch(err => {
     res.json({success: false, message: "Query failed"})

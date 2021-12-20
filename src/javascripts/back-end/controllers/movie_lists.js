@@ -7,7 +7,7 @@ export const allMovieListsAPI = (req, res, next) => {
     for(let list of lists){
       results.push({doc: list, editable: req.user?._id.toHexString() === list.owner.toHexString()})
     }
-    // console.log(results)
+
     res.write(JSON.stringify(results))
     res.end()
   }).catch(err => {

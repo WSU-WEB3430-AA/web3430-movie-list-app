@@ -1,61 +1,45 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { MovieListsContext } from './App'
 import ListItem from './ListItem'
+import { UnifiedPageHeader } from './Pages'
 
 export default function Lists(props) {
-  const {lists, setLists, authenticated, setAuthenticated} = useContext(MovieListsContext)
-  // let navigate = useNavigate()
-
-  // useEffect(() => {
-  //   fetch('/api/movie_lists', {
-  //       method: 'GET', 
-  //       headers: {
-  //         'Content-Type': 'application/json'          
-  //       },
-  //       credentials: 'same-origin'
-  //     })
-  //     .then(response => response.text())
-  //     .then(data => {
-  //       setLists(JSON.parse(data, (key, value) => {
-  //         const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:.*Z$/
-  //         if (typeof value === "string" && dateFormat.test(value)) {
-  //           return new Date(value)
-  //         }
-
-  //         return value
-  //       }))})
-  //     .catch(console.error)
-  // }, [])
-
-  // if(!lists)
-  //   return <p>Loading...</p>
+  let [page, setPage] = useState(0)
+  const {lists} = useContext(MovieListsContext)
+  const changePage =  (p) => setPage(p)
 
   return (
     <div className="mx-5">
-      <div className="row mt-3 pb-4 border-bottom">
-        <div className="col-7"><h3>Movie Lists</h3></div>
-        <div className="col-3">
-          {/* <select className="form-select" onChange={(e) => sortBy(e.target.value)}>
-            <option defaultValue="">Sort movies by:</option>
-            <option value="title">Title</option>
-            <option value="releaseDate">Release date</option>
-            <option value="rating">Rating</option>
-          </select> */}
-        </div>
-        <div className="col-2 d-grid">
-          <Link to="/movie_lists/new" className="btn btn-primary"><FaPlus/> Add new list</Link>
-        </div>
-      </div>
+      <UnifiedPageHeader title="Movie lists" start_sz={9} end_sz={3} extra={
+        <Link to="/movie_lists/new" className="btn btn-primary"><FaPlus/> Add new list</Link>
+      }/>
 
-      <div>
+      <div className="with-border-inbetween">
         {
-          lists.map((l, i) => (
-            <ListItem key={i} list={l} index={i} />
-          ))
+          lists.map((l, i) => {
+            if(Math.floor(i / 2) == page){
+              return (
+                <ListItem key={i} list={l} index={i} />
+              )
+            }
+          })
         }
       </div>
+      <nav className="d-flex justify-content-center">
+        <ul className="pagination">
+          {
+            Array.from(Array(Math.ceil(lists.length / 2)).keys()).map(p => {
+              return (
+                <li key={p} className={p == page ? "page-item active" : "page-item"}>
+                  <a className="page-link" onClick={ (e) => changePage(p) }>{p + 1}</a>
+                </li>
+              )
+            })
+          }
+        </ul>
+      </nav>
     </div>
   )
 }

@@ -4,7 +4,8 @@ import {contactPage, aboutPage, indexPage, signInPage, signUpPage} from './contr
 import {signUserUpAPI, signUserInAPI, signUserOutAPI} from './controllers/users'
 import { allContactsAPI, closeContactAPI, newContactAPI } from './controllers/contacts'
 import { allMovieListsAPI, createMovieListAPI, deleteMovieListAPI, oneMovieListAPI, updateMovieListAPI } from './controllers/movie_lists'
-import {allMovieListMoviesAPI, oneMovieListMovieAPI, createMovieAPI, updateMovieAPI, deleteMovieAPI, reviewMovieAPI} from './controllers/movies'
+import {allMovieListMoviesAPI, oneMovieListMovieAPI, createMovieAPI, updateMovieAPI, deleteMovieAPI, reviewMovieAPI, allMoviesNotInMovieLisAPI} from './controllers/movies'
+import { Profile } from './models/users'
 
 let router = express.Router()
 
@@ -21,13 +22,16 @@ function requireSignIn(req, res, next) {
   }
 }
 
-function currentUser(req){
-  return req.user
-}
-
 export function configureRoutes(app){
-  app.all('*', (req, res, next)=>{
+  app.all('*', async (req, res, next)=>{
     app.locals.signedIn = isSignedIn(req)
+    if(isSignedIn(req)){
+      if(!req.session.user_profile){
+        req.session.user_profile = await Profile.findOne({user: req.user}).exec()
+        console.log(">>>>")
+      }
+      app.locals.displayName = req.session.user_profile.name.family + ', ' + req.session.user_profile.name.given
+    }
     res.cookie("authenticated", app.locals.signedIn)
     next()
   })
@@ -69,6 +73,7 @@ export function configureRoutes(app){
   // Movies
   router.get('/api/movie_lists/:lid/movies', allMovieListMoviesAPI)
   router.get('/api/movie_lists/:lid/movies/:mid', oneMovieListMovieAPI)
+  router.get('/api/movie_lists/:lid/addable_movies', allMoviesNotInMovieLisAPI)
   router.post('/api/movie_lists/:lid/movies', requireSignIn, createMovieAPI)
   router.put('/api/movie_lists/:lid/movies/:mid', requireSignIn, updateMovieAPI)
   router.delete('/api/movie_lists/:lid/movies/:mid', requireSignIn, deleteMovieAPI)

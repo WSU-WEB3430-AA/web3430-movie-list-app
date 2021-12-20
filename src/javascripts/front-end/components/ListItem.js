@@ -19,7 +19,7 @@ export default function ListItem({list}){
     </>) : ''
 
   return (
-    <div className="d-flex my-4">
+    <div className="d-flex">
       <div className="flex-shrink-0 text-center">
         <h1 className="display-5 text-primary">{list.movies.length}</h1>
         <p className="lead">movies</p>

@@ -10,22 +10,33 @@ let userSchema = new Schema({
     required: true,
     trim: true
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
   password: String
 })
 
 userSchema.plugin(passportLocalMongoose)
-export let User = mongoose.model("User", userSchema)
 
-// let profileSchema = new Schema({
-//   user: userSchema,
-//   firstName: {
-//     type: String,
-//     required: true,
-//     trim: true
-//   },
-//   lastName: {
-//     type: String,
-//     required: true,
-//     trim: true
-//   }
-// })
+// Based on but not exactly as https://datatracker.ietf.org/doc/html/draft-smarr-vcarddav-portable-contacts-00
+let profileSchema = new Schema({
+  user: { type: Schema.Types.ObjectId, ref: "User" },
+  provider: String,
+  displayName: String,
+  name: {
+    family: { type: String, required: true, trim: true },
+    given: { type: String, required: true, trim: true },
+    middle: { type: String, trim: true }
+  },
+  avatar: String
+})
+
+profileSchema.virtual('fullName').get(function () {
+  return this.name.family + ', ' + this.name.given
+})
+
+export let User = mongoose.model("User", userSchema)
+export let Profile = mongoose.model("Profile", profileSchema)

@@ -44,7 +44,8 @@ export default function SignUpForm() {
     }
   })
 
-  return <Form title="Sign up" 
+  return <Form title="Sign up for a new account"
+               nav={<div className="text-end mt-2 text-muted"><a href="/signin">Sign in</a> if you already have an account</div>} 
                yup={validationSchema} 
                formik={{handleSubmit, handleChange, values, errors, setFieldValue}} 
                onCancel={()=> document.location= "/movie_lists"}/>

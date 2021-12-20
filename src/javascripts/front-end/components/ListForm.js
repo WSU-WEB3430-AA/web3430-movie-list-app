@@ -58,5 +58,6 @@ export default function ListForm() {
                nav={!is_new ? <Breadcrumbs list={list} page="edit"/> : ''}
                yup={validationSchema} 
                formik={{handleSubmit, handleChange, values, errors, setFieldValue}} 
-               onCancel={()=> document.location= "/movie_lists"}/>
+               onCancel={()=> document.location= "/movie_lists"}
+               textareas={{description: 5}} />
 }

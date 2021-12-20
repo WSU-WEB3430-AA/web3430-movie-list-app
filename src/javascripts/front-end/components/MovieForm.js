@@ -61,10 +61,11 @@ export default function MovieForm() {
       });
     }
   })
-  
+
   return <Form title={is_new ? 'Adding a new movie' : `Editing ${values.title}`}
                nav={is_new ? <Breadcrumbs list={currentList} page="new"/> : <Breadcrumbs list={currentList} movie={movie} page="edit"/>}
                yup={validationSchema} 
                formik={{handleSubmit, handleChange, values, errors, setFieldValue}} 
+               textareas={{plot: 5}}
                onCancel={()=> document.location= is_new ? `/movie_lists/${currentList.id}/movies` : `/movie_lists/${currentList.id}/movies/${movie.id}`}/>
 }

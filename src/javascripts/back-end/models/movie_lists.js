@@ -53,6 +53,6 @@ for (let schema of [movieSchema, listSchema]) {
   })
 }
 
-export let Review = mongoose.model("Review", reviewSchema)
+// export let Review = mongoose.model("Review", reviewSchema)
 export let Movie = mongoose.model("Movie", movieSchema)
 export let List = mongoose.model("List", listSchema)

@@ -18,17 +18,20 @@ import ContactForm from './components/ContactForm'
 import SignInForm from './components/SignInForm'
 import SignOut from './components/SignOut'
 import SignUpForm from './components/SignUpForm'
+import { AboutUs } from './components/Pages'
 
 if(document.querySelector('#main')) {
   ReactDOM.render(<App/>, document.querySelector('#main'))
-}else if(document.querySelector('#contact')){
+} else if(document.querySelector('#contact')) {
   ReactDOM.render(<ContactForm/>, document.querySelector('#contact'))
-}else if(document.querySelector('#signin')) {
+} else if(document.querySelector('#aboutus')) {
+  ReactDOM.render(<AboutUs/>, document.querySelector('#aboutus'))
+} else if(document.querySelector('#signin')) {
   ReactDOM.render(<SignInForm/>, document.querySelector('#signin'))
-}else if(document.querySelector('#signup')) {
+} else if(document.querySelector('#signup')) {
   ReactDOM.render(<SignUpForm/>, document.querySelector('#signup'))
 }
 
-if(document.querySelector('#signout-li')){
+if(document.querySelector('#signout-li')) {
   ReactDOM.render(<SignOut/>, document.querySelector('#signout-li'))
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import DatePicker from 'react-datepicker'
+import { UnifiedPageHeader } from './Pages'
 
 function VHelp({message}){
   return <div className="invalid-feedback">{message}</div>
@@ -34,12 +35,12 @@ function TextField({name, value, required, handleChange, error, type}){
   )
 }
 
-function TextareaField({name, value, required, handleChange, error}){
+function TextareaField({name, value, required, handleChange, error, rows}){
   return (
     <div className="mb-3 row">
       <FieldLabel name={name} required={required} />
       <div className="has-validation col-sm-9">
-        <textarea className={`form-control ${error ? 'is-invalid' : ''}`} id={name} value={value} onChange={handleChange}></textarea>
+        <textarea className={`form-control ${error ? 'is-invalid' : ''}`} id={name} value={value} rows={rows} onChange={handleChange}></textarea>
         <VHelp message={error}/>
       </div>
     </div>
@@ -90,7 +91,7 @@ function DateField({name, value, required, setFieldValue, error}){
   )
 }
 
-export default function Form({title, nav, yup, formik, onCancel}) {
+export default function Form({title, nav, yup, formik, onCancel, textareas}) {
   let fields = []
   let count = 0
   for (const [name, schema] of Object.entries(yup.fields)) {
@@ -123,12 +124,22 @@ export default function Form({title, nav, yup, formik, onCancel}) {
                                      setFieldValue={formik.setFieldValue}/>)
           break;
       default:
-        fields.push(<TextField key={count} 
-                               name={name} 
-                               value={value} 
-                               required={schema.exclusiveTests?.required}
-                               error={error} 
-                               handleChange={formik.handleChange}/>)
+        if(textareas && textareas[name]){
+          fields.push(<TextareaField key={count} 
+            name={name} 
+            value={value} 
+            required={schema.exclusiveTests?.required}
+            error={error} 
+            rows={textareas[name]}
+            handleChange={formik.handleChange}/>)
+        } else {
+          fields.push(<TextField key={count} 
+                                name={name} 
+                                value={value} 
+                                required={schema.exclusiveTests?.required}
+                                error={error} 
+                                handleChange={formik.handleChange}/>)
+        }
     }
 
     count++
@@ -136,10 +147,7 @@ export default function Form({title, nav, yup, formik, onCancel}) {
 
   return (
     <div className="mx-5">
-      <div className="mt-3 pb-4 mb-4 border-bottom d-flex">
-        <h3>{title}</h3>
-        <div className="mt-2 ms-auto">{nav}</div>
-      </div>
+      <UnifiedPageHeader title={title} start_sz={6} end_sz={6} extra={nav} />
       <form onSubmit={formik.handleSubmit}>
         {/* <h1 className="pb-4 mb-4 border-bottom col-sm-9 offset-sm-2">{title}</h1> */}
         { fields }

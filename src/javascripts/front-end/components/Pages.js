@@ -1,6 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+export function UnifiedPageHeader({title, start_sz, end_sz, extra}){
+  return (
+    <div className="row mt-3 mb-4 pb-3 border-bottom border-3 border-primary">
+      <div className={`col-${start_sz} d-grid`}><h3>{title}</h3></div>
+      <div className={`col-${end_sz} d-grid`}>{extra}</div>
+    </div>
+  )
+}
+
 export function Breadcrumbs({list, movie, page}){
   let items = [
     <li  key={0} className="breadcrumb-item"><Link to={`/movie_lists`}>All</Link></li>,
@@ -32,12 +41,15 @@ export function Breadcrumbs({list, movie, page}){
   )
 }
 
-export function About(){
+export function AboutUs(){
   return (
-    <>
-      <h1>About this list</h1>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, odit eligendi adipisci eius ex, accusamus perferendis nobis, explicabo ab ea consequuntur quisquam inventore eum nulla assumenda esse est ipsam sit.</p>
-    </>
+    <div className="mx-5">
+      <UnifiedPageHeader title="About this website" start_sz={6} end_sz={6} />
+      <div>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, odit eligendi adipisci eius ex, accusamus perferendis nobis, explicabo ab ea consequuntur quisquam inventore eum nulla assumenda esse est ipsam sit.</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque ipsum temporibus dignissimos eos commodi tempora, saepe dolorum suscipit. Sunt incidunt sequi quis dolorum autem voluptas repudiandae esse eum fuga ullam.</p>
+      </div>
+    </div>
   )
 }
 

@@ -1,19 +1,23 @@
 import passport from 'passport'
-import {User} from '../models/users'
+import {Profile, User} from '../models/users'
 
 // POST /api/users/signup
 export const signUserUpAPI = (req, res, next) => {
   let user = new User ({
-    // firstName: req.body.firstName,
-    // lastName: req.body.lastName,
-    // email: req.body.email,
-    username: req.body.username
+    username: req.body.username,
+    email: req.body.email
   }) 
 
-  User.register(user, req.body.password, function(err, user) { 
+  User.register(user, req.body.password, async function(err, user) { 
     if (err) { 
       res.json({success:false, message:"Your account could not be saved. Error: ", err}) 
     }else{ 
+      await new Profile({
+        user,
+        provider: 'local',
+        name: { family: req.body.lastName, given: req.body.firstName }
+      }).save()
+
       res.json({success: true, message: "Your account was successfully created"}) 
     } 
 
@@ -23,7 +27,7 @@ export const signUserUpAPI = (req, res, next) => {
 
 // POST /api/users/signin
 export const signUserInAPI = (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
+  passport.authenticate('local',  (err, user, info) => {
     if(err) res.status(500)
     else if(!user) res.status(404)
     req.logIn(user, function(err) {
@@ -60,5 +64,6 @@ export const signUserInAPI = (req, res, next) => {
 // DELETE /api/users/signout
 export const signUserOutAPI = (req, res, next) => {
   req.logout()
+  req.session.destroy()
   res.end()
 }

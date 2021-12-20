@@ -24,7 +24,10 @@ export default function MoviesGetter() {
           return value
         })
 
-        setMovies(results.movies)
+        setMovies(results.movies.map(item => {
+          item.doc.editable = item.editable
+          return item.doc
+        }))
         setCurrentList(results.list)
       }).catch(console.error)
   }, [])

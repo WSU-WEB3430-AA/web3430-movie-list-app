@@ -41,6 +41,7 @@ export default function ContactForm() {
   return <Form title="Contact us" 
               yup={validationSchema} 
               formik={{handleSubmit, handleChange, values, errors, setFieldValue}} 
-              onCancel={()=> document.location= "/movie_lists"}/>
+              onCancel={()=> document.location= "/movie_lists"}
+              textareas={{message: 5}}/>
   
 }

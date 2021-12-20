@@ -8,7 +8,7 @@ export default function MovieItem({movie}){ //{ movie, onLike = f => f }) {
   let navigate = useNavigate();
   
   return (
-    <div className="d-flex my-4">
+    <div className="d-flex">
       <div className="flex-shrink-0" style={{width: "15%"}}>
         <img src={movie.poster} className="img-fluid img-thumbnail" alt={movie.title}/>
       </div>

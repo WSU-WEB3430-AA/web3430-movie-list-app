@@ -1,12 +1,15 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { MovieListsContext } from './App'
 import MovieItem from './MovieItem'
-import { Breadcrumbs } from './Pages'
+import { Breadcrumbs, UnifiedPageHeader } from './Pages'
 
 export default function Movies() {
+  let [page, setPage] = useState(0)
   const {movies, setMovies, currentList} = useContext(MovieListsContext)
+  const changePage =  (p) => setPage(p)
+  
   const sortBy = (field) => {
     if(field === "releaseDate"){ // Date descendingly
       // Either
@@ -19,7 +22,7 @@ export default function Movies() {
     } else if(field === "title"){ // String
       movies.sort((a, b) => a[field].localeCompare(b[field]))
     }
-
+    setPage(0)
     setMovies([...movies])
   }
 
@@ -29,32 +32,50 @@ export default function Movies() {
   return (
     <div className="mx-5">
       <Breadcrumbs list={currentList}></Breadcrumbs>
-      <div className="row mt-3 pb-4 border-bottom">
-        <div className="col-7"><h3>Movies</h3></div>
-        <div className="col-3">
-          <select className="form-select" onChange={(e) => sortBy(e.target.value)}>
-            <option defaultValue="">Sort movies by:</option>
-            <option value="title">Title</option>
-            <option value="releaseDate">Release date</option>
-            <option value="rating">Rating</option>
-          </select>
+      <UnifiedPageHeader title="Movies" start_sz={7} end_sz={5} extra={
+        <div className="row">
+          <div className="col d-grid">
+            <select className="form-select" onChange={(e) => sortBy(e.target.value)}>
+              <option defaultValue="">Sort movies by:</option>
+              <option value="title">Title</option>
+              <option value="releaseDate">Release date</option>
+              <option value="rating">Rating</option>
+            </select>
+          </div>
+          <div className="col d-grid">
+            <Link to={`/movie_lists/${currentList.id}/movies/new`} className="btn btn-primary"><FaPlus/> Add new movie</Link>
+          </div>
         </div>
-        <div className="col-2 d-grid">
-          <Link to={`/movie_lists/${currentList.id}/movies/new`} className="btn btn-primary"><FaPlus/> Add new movie</Link>
-        </div>
-      </div>
+      }/>
 
-      <div>
+      <div className="with-border-inbetween">
         {
-          movies.map((m, i) => (
-            <MovieItem key={m.id} movie={m} index={i} onLike={() => {
-              movies[i].likes = movies[i].likes ? movies[i].likes + 1 : 1
+          movies.map((m, i) => {
+            if(Math.floor(i / 5) == page){
+              return (
+                <MovieItem key={m.id} movie={m} index={i} onLike={() => {
+                  movies[i].likes = movies[i].likes ? movies[i].likes + 1 : 1
 
-              setMovies(movies.map(m => m))
-            }} />
-          ))
+                  setMovies(movies.map(m => m))
+                }} />
+              )
+            }
+          })
         }
       </div>
+      <nav className="d-flex justify-content-center">
+        <ul className="pagination">
+          {
+            Array.from(Array(Math.ceil(movies.length / 5)).keys()).map(p => {
+              return (
+                <li key={p} className={p == page ? "page-item active" : "page-item"}>
+                  <a className="page-link" onClick={ (e) => changePage(p) }>{p + 1}</a>
+                </li>
+              )
+            })
+          }
+        </ul>
+      </nav>
     </div>
   )
 }

@@ -58,16 +58,18 @@ export default function MovieReviews({list, movie}) {
       <Form title="Leave a review"
             yup={validationSchema} 
             formik={{handleSubmit, handleChange, values, errors, setFieldValue}} 
-            onCancel={false}/> 
+            onCancel={false}
+            textareas={{comment: 2}}/> 
       }
 
-      <h3>Reviews</h3>
+      <h3 className="mt-3 pb-4 border-bottom border-2 border-primary">Reviews</h3>
+      <div className="with-border-inbetween">
       {
         reviews.map((r, ndx) => {
           return (
             <div className="d-flex my-4" key={ndx}>
               <div className="flex-shrink-0">
-                <Identicon string={r.postedBy} size={50}/> 
+                <Identicon string={r.postedBy} size={80} className="img-thumbnail rounded mx-auto d-block"/> 
               </div>
               <div className="flex-grow-1 ms-5">
                 <figure>
@@ -81,6 +83,7 @@ export default function MovieReviews({list, movie}) {
           )
         })
       }
+      </div>
     </>
   )
 }
