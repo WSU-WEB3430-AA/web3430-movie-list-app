@@ -28,7 +28,6 @@ export function configureRoutes(app){
     if(isSignedIn(req)){
       if(!req.session.user_profile){
         req.session.user_profile = await Profile.findOne({user: req.user}).exec()
-        console.log(">>>>")
       }
       app.locals.displayName = req.session.user_profile.name.family + ', ' + req.session.user_profile.name.given
     }

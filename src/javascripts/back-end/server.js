@@ -66,7 +66,9 @@ const options = {
   key: fs.readFileSync(process.env.SERVER_KEY),
   cert: fs.readFileSync(process.env.SERVER_CERT),
 }
-require("https").createServer(options, app)
-.listen(process.env.PORT || '8080', function (req, res) {
+
+let server = require("https").createServer(options, app)
+server.on('error', err => { throw err })
+server.listen(process.env.PORT || '8080', function (req, res) {
   console.log(`Server started at port ${process.env.PORT || '8080'}`);
 })

@@ -36,7 +36,6 @@ export default function MovieReviews({list, movie}) {
           return response.text()
         }
       }).then((data) => {
-          // console.log(data)
           setReviews(JSON.parse(data, (key, value) => {
             const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:.*Z$/
             if (typeof value === "string" && dateFormat.test(value)) {
