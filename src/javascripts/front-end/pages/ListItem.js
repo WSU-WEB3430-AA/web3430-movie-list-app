@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {format} from 'date-fns'
-import { MovieListsContext } from './App';
-import { DeleteModal } from './DeleteModal';
+import { MovieListsContext } from '../App';
+import { DeleteModal } from '../forms/DeleteModal';
 
 export default function ListItem({list}){
   const {currentList, setCurrentList} = useContext(MovieListsContext)

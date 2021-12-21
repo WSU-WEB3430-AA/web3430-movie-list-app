@@ -13,12 +13,16 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './components/App'
-import ContactForm from './components/ContactForm'
-import SignInForm from './components/SignInForm'
-import SignOut from './components/SignOut'
-import SignUpForm from './components/SignUpForm'
-import { AboutUs } from './components/Pages'
+import App from './App'
+import ContactForm from './forms/ContactForm'
+import SignInForm from './forms/SignInForm'
+import SignOut from './forms/SignOut'
+import SignUpForm from './forms/SignUpForm'
+import { AboutUs } from './pages/Pages'
+import { Profile } from './pages/Profile'
+import { toast } from 'react-toastify'
+
+toast.configure()
 
 if(document.querySelector('#main')) {
   ReactDOM.render(<App/>, document.querySelector('#main'))
@@ -30,8 +34,11 @@ if(document.querySelector('#main')) {
   ReactDOM.render(<SignInForm/>, document.querySelector('#signin'))
 } else if(document.querySelector('#signup')) {
   ReactDOM.render(<SignUpForm/>, document.querySelector('#signup'))
-}
+} else if(document.querySelector('#profile')) {
+  ReactDOM.render(<Profile/>, document.querySelector('#profile'))
+} 
 
-if(document.querySelector('#signout-li')) {
-  ReactDOM.render(<SignOut/>, document.querySelector('#signout-li'))
+if(document.querySelector('#current-user-li')) {
+  let el = document.querySelector('#current-user-li')
+  ReactDOM.render(<SignOut displayName={el.dataset.displayName}/>, el)
 }

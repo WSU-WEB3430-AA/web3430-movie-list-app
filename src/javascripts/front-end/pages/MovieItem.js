@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {format} from 'date-fns'
-import { MovieListsContext } from './App';
+import { MovieListsContext } from '../App';
 
 export default function MovieItem({movie}){ //{ movie, onLike = f => f }) {
   const {currentList} = useContext(MovieListsContext)

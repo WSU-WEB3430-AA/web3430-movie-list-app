@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
-import { MovieListsContext } from './App'
+import { MovieListsContext } from '../App'
 import ListItem from './ListItem'
-import { UnifiedPageHeader } from './Pages'
+import { UnifiedPageHeader } from '../pages/Pages'
+import { APP_SETTINGS } from '../config/settings'
 
 export default function Lists(props) {
   let [page, setPage] = useState(0)
@@ -19,7 +20,7 @@ export default function Lists(props) {
       <div className="with-border-inbetween">
         {
           lists.map((l, i) => {
-            if(Math.floor(i / 2) == page){
+            if(Math.floor(i / APP_SETTINGS.items_per_page) == page){
               return (
                 <ListItem key={i} list={l} index={i} />
               )
@@ -30,7 +31,7 @@ export default function Lists(props) {
       <nav className="d-flex justify-content-center">
         <ul className="pagination">
           {
-            Array.from(Array(Math.ceil(lists.length / 2)).keys()).map(p => {
+            Array.from(Array(Math.ceil(lists.length / APP_SETTINGS.items_per_page)).keys()).map(p => {
               return (
                 <li key={p} className={p == page ? "page-item active" : "page-item"}>
                   <a className="page-link" onClick={ (e) => changePage(p) }>{p + 1}</a>

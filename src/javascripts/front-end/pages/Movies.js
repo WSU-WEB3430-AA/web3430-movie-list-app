@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { MovieListsContext } from './App'
+import { Link } from 'react-router-dom'
+import { MovieListsContext } from '../App'
 import MovieItem from './MovieItem'
-import { Breadcrumbs, UnifiedPageHeader } from './Pages'
+import { Breadcrumbs, UnifiedPageHeader } from '../pages/Pages'
+import { APP_SETTINGS } from '../config/settings'
 
 export default function Movies() {
   let [page, setPage] = useState(0)
@@ -51,7 +52,7 @@ export default function Movies() {
       <div className="with-border-inbetween">
         {
           movies.map((m, i) => {
-            if(Math.floor(i / 5) == page){
+            if(Math.floor(i / APP_SETTINGS.items_per_page) == page){
               return (
                 <MovieItem key={m.id} movie={m} index={i} onLike={() => {
                   movies[i].likes = movies[i].likes ? movies[i].likes + 1 : 1
@@ -65,14 +66,14 @@ export default function Movies() {
       </div>
       <nav className="d-flex justify-content-center">
         <ul className="pagination">
-          {
-            Array.from(Array(Math.ceil(movies.length / 5)).keys()).map(p => {
+          { movies.length > 0 ?
+            Array.from(Array(Math.ceil(movies.length / APP_SETTINGS.items_per_page)).keys()).map(p => {
               return (
                 <li key={p} className={p == page ? "page-item active" : "page-item"}>
                   <a className="page-link" onClick={ (e) => changePage(p) }>{p + 1}</a>
                 </li>
               )
-            })
+            }) : <p className="text-center">Nothing to display</p>
           }
         </ul>
       </nav>

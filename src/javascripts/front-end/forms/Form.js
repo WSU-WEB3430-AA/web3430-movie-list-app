@@ -1,6 +1,6 @@
 import React from 'react'
 import DatePicker from 'react-datepicker'
-import { UnifiedPageHeader } from './Pages'
+import { UnifiedPageHeader } from '../pages/Pages'
 
 function VHelp({message}){
   return <div className="invalid-feedback">{message}</div>
@@ -147,9 +147,8 @@ export default function Form({title, nav, yup, formik, onCancel, textareas}) {
 
   return (
     <div className="mx-5">
-      <UnifiedPageHeader title={title} start_sz={6} end_sz={6} extra={nav} />
+      <UnifiedPageHeader title={title} start_sz={6} end_sz={6} extra={nav} extra_cls={'breadcrumb-end'} />
       <form onSubmit={formik.handleSubmit}>
-        {/* <h1 className="pb-4 mb-4 border-bottom col-sm-9 offset-sm-2">{title}</h1> */}
         { fields }
 
         <div className="mb-3 row">

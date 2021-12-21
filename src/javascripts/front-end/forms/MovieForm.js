@@ -1,13 +1,12 @@
 import { useFormik } from 'formik'
 import React, { useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import { MovieListsContext } from './App'
+import { MovieListsContext } from '../App'
 import * as yup from 'yup'
 import { toast } from 'react-toastify'
 import Form from './Form'
-import { Breadcrumbs } from './Pages'
-
-toast.configure()
+import { Breadcrumbs } from '../pages/Pages'
+import AddableMoviesForm from './AddableMoviesForm'
 
 const validationSchema = yup.object({
   year: yup.number().required().min(1900).max(new Date().getFullYear()),
@@ -25,7 +24,7 @@ export default function MovieForm() {
     return <></>
   }
 
-  let { mid } = useParams()
+  let { mid, lid } = useParams()
   let movie = mid ? movies.find(m => m.id == mid ) : {}
   let is_new = mid === undefined
   const { handleSubmit, handleChange, values, errors, setFieldValue } = useFormik({
@@ -62,10 +61,16 @@ export default function MovieForm() {
     }
   })
 
-  return <Form title={is_new ? 'Adding a new movie' : `Editing ${values.title}`}
-               nav={is_new ? <Breadcrumbs list={currentList} page="new"/> : <Breadcrumbs list={currentList} movie={movie} page="edit"/>}
-               yup={validationSchema} 
-               formik={{handleSubmit, handleChange, values, errors, setFieldValue}} 
-               textareas={{plot: 5}}
-               onCancel={()=> document.location= is_new ? `/movie_lists/${currentList.id}/movies` : `/movie_lists/${currentList.id}/movies/${movie.id}`}/>
+  return(
+    <>
+      <Form title={is_new ? 'Adding a new movie' : `Editing ${values.title}`}
+            nav={is_new ? <Breadcrumbs list={currentList} page="new"/> : <Breadcrumbs list={currentList} movie={movie} page="edit"/>}
+            yup={validationSchema} 
+            formik={{handleSubmit, handleChange, values, errors, setFieldValue}} 
+            textareas={{plot: 5}}
+            onCancel={()=> document.location= is_new ? `/movie_lists/${currentList.id}/movies` : `/movie_lists/${currentList.id}/movies/${movie.id}`}/>
+
+      { is_new && <AddableMoviesForm lid={lid}/> }
+    </>
+  )
 }

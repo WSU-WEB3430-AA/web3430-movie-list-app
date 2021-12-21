@@ -14,6 +14,7 @@ export const signUserUpAPI = (req, res, next) => {
     }else{ 
       await new Profile({
         user,
+        displayName: `${req.body.lastName}, ${req.body.firstName}`,
         provider: 'local',
         name: { family: req.body.lastName, given: req.body.firstName }
       }).save()
@@ -66,4 +67,20 @@ export const signUserOutAPI = (req, res, next) => {
   req.logout()
   req.session.destroy()
   res.end()
+}
+
+// GET /api/users/profile
+export const currentUserProfileAPI = (req, res, next) => {
+  Profile.findOne({user: req.user._id}).populate('user').exec().then(profile=> {
+    let results = {
+      username: profile.user.username,
+      displayName: profile.displayName,
+      email: profile.user.email
+    }
+    res.write(JSON.stringify(results))
+    res.end()
+  }).catch(err => {
+    res.json({success: false, message: "Query failed"})
+    res.end()
+  })
 }

@@ -20,8 +20,11 @@ export const allMovieListMoviesAPI = (req, res, next) => {
 export const allMoviesNotInMovieLisAPI = (req, res, next) => {
   List.findOne({$and: [{_id: req.params.lid}, {$or:[{public: true}, {owner: req.user?._id}]}]}).exec().then(async list=> {
     let addables = await Movie.find({_id: {$nin: list.movies}})
-
-    res.write(JSON.stringify({list: {id: list.id, title: list.title}, movies: addables}))
+    let results = []
+    for(let movie of addables){
+      results.push({id: movie.id, title: movie.title, poster: movie.poster})
+    }
+    res.write(JSON.stringify({list: {id: list.id, title: list.title}, movies: results}))
     res.end()
   }).catch(err => {
     res.json({success: false, message: "Query failed"})
@@ -63,6 +66,18 @@ export const createMovieAPI = (req, res, next) => {
   })
 }
 
+// PUT /api/movie_lists/:lid/movies/add
+export const addMoviesToListAPI = (req, res, next) => {
+  List.findOne({_id: req.params.lid}).populate('movies').exec().then(async list=> {
+    list.movies.push(...req.body.movies)
+    await list.save()
+    res.end()
+  }).catch(err => {
+    res.json({success: false, message: "Query failed"})
+    res.end()
+  })
+}
+
 // PUT /api/movie_lists/:lid/movies/:mid
 export const updateMovieAPI = (req, res, next) => {
   Movie.findOne({_id: req.params.mid}).select('-reviews').exec((err, movie)=> {
@@ -89,7 +104,7 @@ export const reviewMovieAPI = (req, res, next) => {
   Movie.findOne({_id: req.params.mid}).exec().then(movie=> {
     let review = {
       comment: req.body.comment,
-      postedBy: req.user,
+      postedBy: {displayName: req.session.user_profile.displayName, user: req.user},
       postedAt: new Date()
     }
     movie.reviews.push(review)
@@ -117,5 +132,24 @@ export const deleteMovieAPI = (req, res, next) => {
     }else{
       res.end()
     }
+  })
+}
+
+// DELETE /api/movie_lists/:lid/movies/:mid/remove
+export const removeMovieFromListAPI = (req, res, next) => {
+  List.findOne({_id: req.params.lid}).exec().then(async list=> {
+    let movies = []
+    for(let movie of list.movies){ 
+      if ( movie.toHexString() !== req.params.mid) { 
+        movies.push(movie)
+      }
+    }
+
+    list.movies = movies
+    await list.save()
+    res.end()
+  }).catch(err => {
+    res.json({success: false, message: "Query failed"})
+    res.end()
   })
 }

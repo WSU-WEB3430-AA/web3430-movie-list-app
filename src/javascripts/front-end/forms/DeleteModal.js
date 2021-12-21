@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 
 export function DeleteModal({index, movie, list}){
   let deleteListOrMovie = () => {
-    fetch(`/api/movie_lists/${list.id}${movie ? '/movies/' + movie.id : ''}`, {
+    fetch(`/api/movie_lists/${list.id}${movie ? '/movies/' + movie.id + '/remove' : ''}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'

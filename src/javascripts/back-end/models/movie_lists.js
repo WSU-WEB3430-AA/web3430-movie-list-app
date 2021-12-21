@@ -4,10 +4,18 @@ const Schema = mongoose.Schema
 // Movies can be reviewed
 let reviewSchema = new Schema({
   comment: String,
-  postedBy: { type: Schema.Types.ObjectId, ref: "User" },
+  postedBy: {displayName: String, user: { type: Schema.Types.ObjectId, ref: "User" }},
   postedAt: Date
 })
 
+reviewSchema.set('toJSON', {
+  virtuals: true,
+  transform: (doc, ret, options) => {
+    delete ret.__v
+    delete ret._id
+    delete ret.postedBy.user
+  }
+})
 // A movie can have zero or more reviews (one-2-many relationship)
 let movieSchema = new Schema({
   title: String,

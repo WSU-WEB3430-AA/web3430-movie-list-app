@@ -18,3 +18,7 @@ export const signInPage = (req, res, next) => {
 export const signUpPage = (req, res, next) => {
   res.render('signup')
 }
+
+export const profilePage = (req, res, next) => {
+  res.render('profile')
+}

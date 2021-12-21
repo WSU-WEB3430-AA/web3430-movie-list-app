@@ -1,11 +1,12 @@
 import React from 'react'
+import { FaStar } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
-export function UnifiedPageHeader({title, start_sz, end_sz, extra}){
+export function UnifiedPageHeader({title, start_sz, end_sz, extra, extra_cls}){
   return (
     <div className="row mt-3 mb-4 pb-3 border-bottom border-3 border-primary">
-      <div className={`col-${start_sz} d-grid`}><h3>{title}</h3></div>
-      <div className={`col-${end_sz} d-grid`}>{extra}</div>
+      <div className={`col-${start_sz} ${extra_cls || "d-grid"}`}><h3>{title}</h3></div>
+      <div className={`col-${end_sz} ${extra_cls || "d-grid"}`}>{extra}</div>
     </div>
   )
 }
@@ -38,6 +39,15 @@ export function Breadcrumbs({list, movie, page}){
         { items }
       </ol>
     </nav>
+  )
+}
+
+export default function StarRating({rating, totalStars = 5}){
+
+  return (
+    [...Array(totalStars)].map((n,i) => (
+      <FaStar key={i} color={i <= Math.floor(rating / 2) - 1 ? 'maroon' : 'grey'}></FaStar>
+    ))
   )
 }
 

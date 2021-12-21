@@ -10,8 +10,7 @@ nav(class="navbar navbar-expand-md navbar-dark bg-primary")
             a(class="nav-link", href=val) #{key}
       ul#authul(class="navbar-nav mb-2 mb-lg-0")
         if signedIn
-          li=displayName
-          li#signout-li.nav-item
+          li#current-user-li(class="nav-item dropdown" data-display-name=displayName)
         else 
           li.nav-item 
             a(class="nav-link", href="/signin") Sign in 

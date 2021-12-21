@@ -11,7 +11,7 @@ mongoose.connect(process.env.DB_URL).then(db => {
   console.log(err)
 })
 
-import { top10 } from "../top10"
+import { top10 } from "../front-end/config/top10"
 import { Profile, User } from "./models/users"
 
 // STEP 1: Create a user
@@ -28,7 +28,8 @@ User.register(user, 'ww', async function(err, user) {
     await new Profile({
       user,
       provider: 'local',
-      name: { family: 'Wlast', given: 'Wfirst' }
+      displayName: 'Williams, Will',
+      name: { family: 'Williams', given: 'Will' }
     }).save()
     console.log('....... DONE!')
 

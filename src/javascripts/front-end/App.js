@@ -1,17 +1,18 @@
 import React, { createContext, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
-import { ToastContainer } from 'react-toastify';
-import Movie from './Movie'
-import Lists from './Lists'
-import ListForm from './ListForm'
-import Movies from './Movies'
-import MovieForm from './MovieForm'
-import SignInForm from './SignInForm'
-import SignUpForm from './SignUpForm'
-import { Error401 } from './Pages'
-import ListsGetter from './ListsGetter'
-import MoviesGetter from './MoviesGetter'
+import { toast, ToastContainer } from 'react-toastify'
+import Movie from './pages/Movie'
+import Lists from './pages/Lists'
+import ListForm from './forms/ListForm'
+import Movies from './pages/Movies'
+import MovieForm from './forms/MovieForm'
+import SignInForm from './forms/SignInForm'
+import SignUpForm from './forms/SignUpForm'
+import { Error401 } from './pages/Pages'
+import ListsGetter from './data/ListsGetter'
+import MoviesGetter from './data/MoviesGetter'
+import { Profile } from './pages/Profile'
 
 export const MovieListsContext = createContext()
 
@@ -40,6 +41,7 @@ export default function App(){
           </Route>
           <Route path="/signin" element={<SignInForm/>}/>
           <Route path="/signup" element={<SignUpForm/>}/>
+          <Route path="/profile" element={<Profile/>}/>
           <Route path="*" element={<Error401 />}/>
         </Routes>
       </BrowserRouter>

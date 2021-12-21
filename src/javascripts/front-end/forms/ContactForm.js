@@ -43,5 +43,4 @@ export default function ContactForm() {
               formik={{handleSubmit, handleChange, values, errors, setFieldValue}} 
               onCancel={()=> document.location= "/movie_lists"}
               textareas={{message: 5}}/>
-  
 }

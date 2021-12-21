@@ -1,11 +1,11 @@
 import { useFormik } from 'formik'
 import React, { useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import { MovieListsContext } from './App'
+import { MovieListsContext } from '../App'
 import * as yup from 'yup'
 import { toast } from 'react-toastify'
 import Form from './Form'
-import { Breadcrumbs } from './Pages'
+import { Breadcrumbs } from '../pages/Pages'
 
 const validationSchema = yup.object({
   title: yup.string().required(),
