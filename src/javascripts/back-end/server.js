@@ -61,14 +61,8 @@ app.use(function (err, req, res, next) {
 })
 
 //Starting the server
-const fs = require("fs")
-const options = {
-  key: fs.readFileSync(process.env.SERVER_KEY),
-  cert: fs.readFileSync(process.env.SERVER_CERT),
-}
-
-let server = require("https").createServer(options, app)
-server.on('error', err => { throw err })
+let server = require("http").createServer(app)
+server.on('error', err => { console.log(6666); throw err })
 server.listen(process.env.PORT || '8080', function (req, res) {
   console.log(`Server started at port ${process.env.PORT || '8080'}`);
 })

@@ -25,20 +25,20 @@ import { toast } from 'react-toastify'
 toast.configure()
 
 if(document.querySelector('#main')) {
-  ReactDOM.render(<App/>, document.querySelector('#main'))
+  ReactDOM.render(<React.StrictMode><App/></React.StrictMode>, document.querySelector('#main'))
 } else if(document.querySelector('#contact')) {
-  ReactDOM.render(<ContactForm/>, document.querySelector('#contact'))
+  ReactDOM.render(<React.StrictMode><ContactForm/></React.StrictMode>, document.querySelector('#contact'))
 } else if(document.querySelector('#aboutus')) {
-  ReactDOM.render(<AboutUs/>, document.querySelector('#aboutus'))
+  ReactDOM.render(<React.StrictMode><AboutUs/></React.StrictMode>, document.querySelector('#aboutus'))
 } else if(document.querySelector('#signin')) {
-  ReactDOM.render(<SignInForm/>, document.querySelector('#signin'))
+  ReactDOM.render(<React.StrictMode><SignInForm/></React.StrictMode>, document.querySelector('#signin'))
 } else if(document.querySelector('#signup')) {
-  ReactDOM.render(<SignUpForm/>, document.querySelector('#signup'))
+  ReactDOM.render(<React.StrictMode><SignUpForm/></React.StrictMode>, document.querySelector('#signup'))
 } else if(document.querySelector('#profile')) {
-  ReactDOM.render(<Profile/>, document.querySelector('#profile'))
+  ReactDOM.render(<React.StrictMode><Profile/></React.StrictMode>, document.querySelector('#profile'))
 } 
 
 if(document.querySelector('#current-user-li')) {
   let el = document.querySelector('#current-user-li')
-  ReactDOM.render(<SignOut displayName={el.dataset.displayName}/>, el)
+  ReactDOM.render(<React.StrictMode><SignOut displayName={el.dataset.displayName}/></React.StrictMode>, el)
 }

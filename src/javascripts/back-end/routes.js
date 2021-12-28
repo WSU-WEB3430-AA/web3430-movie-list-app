@@ -39,7 +39,7 @@ export function configureRoutes(app){
    * Section 1: Rendered pages
    ****************************************************************************/
   // Rendered Pages
-  router.get('/', indexPage)
+  router.get('', (req, res) => res.redirect(301, '/movie_lists'))
   router.get('/about', aboutPage)
   router.get('/contact', contactPage)
 
