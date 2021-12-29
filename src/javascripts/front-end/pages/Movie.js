@@ -27,7 +27,7 @@ export default function Movie(props){
       }/>
 
       <div className="clearfix mt-4">
-        <img src={movie.poster} className="w-25 float-end" alt={movie.title }/>
+        <img src={movie.poster} className="ms-2 w-25 float-end" alt={movie.title }/>
         {/* <h2 className="card-title">{ movie.title}</h2> */}
         <p className="card-text">{ movie.plot }</p>
         <p><strong>Rating</strong>: <StarRating rating={movie.rating}/> { movie.rating }</p>

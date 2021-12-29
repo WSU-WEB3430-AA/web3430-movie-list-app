@@ -1,6 +1,5 @@
 // Required by Webpack - do not touch
-//require.context('../', true, /\.(html|txt|dat)$/i)
-// require('../favicon.ico')
+require('../../favicon.ico')
 require.context('../../fonts/', true, /\.(eot|ttf|woff|woff2)$/i)
 require.context('../../images/', true, /\.(png|jpg|jpeg|gif|svg)$/i)
 require.context('../../stylesheets/', true, /\.(css|scss)$/i)
@@ -10,7 +9,6 @@ require.context('../../', true, /\.(json|txt|dat)$/i)
 import 'bootstrap'
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'

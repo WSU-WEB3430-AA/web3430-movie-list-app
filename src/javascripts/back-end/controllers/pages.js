@@ -1,6 +1,6 @@
 const title = 'My top 10 Movies'
 export const indexPage = (req, res, next) => {
-  res.render('index') //, {no_header: false})
+  res.render('index')
 }
 
 export const aboutPage = (req, res, next) => {

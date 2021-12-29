@@ -55,14 +55,40 @@ import { configureRoutes } from './routes'
 configureRoutes(app)
 
 // Handling errors
-app.use(function (err, req, res, next) {
-  console.error(err.stack)
-  res.status(500).send('Something went wrong! Check your server logs')
+// Page not found errors
+app.use((req, res, next) => {
+  let err = new Error(`Page "${req.path}" not found`)
+  err.status = 404
+  next(err)
+})
+// Error handler
+app.use((err, req, res, next) => {
+  if (!err.status || err.status == '') {
+    err.status = 500
+  }
+  res.status(err.status || 500)
+  res.render('error', { err })
 })
 
 //Starting the server
 let server = require("http").createServer(app)
-server.on('error', err => { console.log(6666); throw err })
-server.listen(process.env.PORT || '8080', function (req, res) {
-  console.log(`Server started at port ${process.env.PORT || '8080'}`);
+let port = process.env.PORT || '8080'
+server.on('error', err => {
+  if (err.syscall !== 'listen') {
+    throw err
+  }
+
+  switch (err.code) {
+    case 'EACCES':
+      console.error(`Port ${port} requires elevated privileges`)
+      process.exit(1)
+    case 'EADDRINUSE':
+      console.error(`Port ${port} is already in use`)
+      process.exit(1);
+    default:
+      throw err
+  }
+})
+server.listen(port, () => {
+  console.log(`Server started at port ${port}`)
 })

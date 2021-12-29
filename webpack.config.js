@@ -40,13 +40,10 @@ module.exports = {
         exclude: /node_modules/,
         use: ['babel-loader']
       }, {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, {loader: 'css-loader', options: {url: false}}, 'postcss-loader']
-      }, {
-        test: /\.scss$/,
+        test: /\.(css|scss)$/,
         use: [MiniCssExtractPlugin.loader, {loader: 'css-loader', options: {url: false}}, 'postcss-loader', 'sass-loader']
       }, {
-        test: /\.(json|txt|dat|png|jpg|jpeg|gif|svg|eot|ttf|woff|woff2)$/i,
+        test: /\.(txt|dat|png|jpg|jpeg|gif|svg|ico|eot|ttf|woff|woff2)$/i,
         use: [{
           loader: 'file-loader',
           options: { 
