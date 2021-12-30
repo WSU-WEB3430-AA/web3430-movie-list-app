@@ -3,7 +3,6 @@ require('../../favicon.ico')
 require.context('../../fonts/', true, /\.(eot|ttf|woff|woff2)$/i)
 require.context('../../images/', true, /\.(png|jpg|jpeg|gif|svg)$/i)
 require.context('../../stylesheets/', true, /\.(css|scss)$/i)
-require.context('../../', true, /\.(json|txt|dat)$/i)
 
 // TODO
 import 'bootstrap'
