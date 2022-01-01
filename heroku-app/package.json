@@ -1,11 +1,12 @@
 { 
   "name": "movie_lists_app", 
-  "description": "An app deployed to heroku", 
+  "description": "A MERN app deployed to heroku", 
   "scripts": { 
     "start": "node server.js" 
   }, 
-  "main": "index.js", 
+  "main": "server.js", 
   "dependencies": { 
+    "@babel/runtime": "^7.16.7",
     "cookie-parser": "^1.4.6",
     "date-fns": "^2.27.0",
     "dotenv": "^10.0.0",

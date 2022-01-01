@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -12,8 +14,6 @@ var _passport = _interopRequireDefault(require("passport"));
 var _users = require("./models/users");
 
 var _routes = require("./routes");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var path = require('path');
 
@@ -54,7 +54,7 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));
-app.use(express["static"](path.join(__dirname, '..', '..', '..', 'public'))); // Sessions
+app.use(express["static"](path.join(__dirname, 'public'))); // Sessions
 
 var session = require('express-session');
 
