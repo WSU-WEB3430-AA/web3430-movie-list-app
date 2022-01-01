@@ -1,5 +1,7 @@
 let path = require('path')
 require('dotenv').config()
+import "core-js/stable"
+import "regenerator-runtime/runtime"
 
 // Connect to the database
 import mongoose from "mongoose"

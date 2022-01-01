@@ -5,6 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.app = void 0;
 
+require("core-js/stable");
+
+require("regenerator-runtime/runtime");
+
 var _mongoose = _interopRequireDefault(require("mongoose"));
 
 var _passport = _interopRequireDefault(require("passport"));
@@ -17,8 +21,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 var path = require('path');
 
-require('dotenv').config(); // Connect to the database
-
+require('dotenv').config();
 
 _mongoose["default"].connect(process.env.DB_URL).then(function (db) {
   console.log("Connected to ".concat(db.connections[0].name));
