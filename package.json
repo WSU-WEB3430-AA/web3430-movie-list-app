@@ -6,7 +6,7 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
-    "deploy": "npx webpack --mode development",
+    "deploy": "npx webpack",
     "start": "npx webpack-dev-server",
     "server": "nodemon ./src/javascripts/back-end/server.js --exec babel-node"
   },

@@ -2,6 +2,7 @@ const path = require('path')
 const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const env = process.env.NODE_ENV || 'development'
 
 const htmlPlugins = glob.sync('./src/**/*.html').map(file => {
   return new HtmlWebpackPlugin({
@@ -15,9 +16,9 @@ module.exports = {
   entry: {
     main: './src/javascripts/front-end/main.js'
   },
-  mode: 'development',
-  watch: true,
-  devtool: 'source-map',
+  mode: env,
+  watch: env === 'development',
+  devtool: env === 'development' ? 'source-map' : false,
   devServer: {
     static: path.join(__dirname, 'public'),
     historyApiFallback: true,
