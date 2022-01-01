@@ -5,10 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.app = void 0;
 
-require("core-js/stable");
-
-require("regenerator-runtime/runtime");
-
 var _mongoose = _interopRequireDefault(require("mongoose"));
 
 var _passport = _interopRequireDefault(require("passport"));
@@ -21,7 +17,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 var path = require('path');
 
-require('dotenv').config();
+require('dotenv').config(); // // To make async/await calls work
+// import "core-js/stable"
+// import "regenerator-runtime/runtime"
+// Connect to the database
+
 
 _mongoose["default"].connect(process.env.DB_URL).then(function (db) {
   console.log("Connected to ".concat(db.connections[0].name));
@@ -54,7 +54,7 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));
-app.use(express["static"](path.join(__dirname, 'public'))); // Sessions
+app.use(express["static"](path.join(__dirname, '..', '..', '..', 'public'))); // Sessions
 
 var session = require('express-session');
 
