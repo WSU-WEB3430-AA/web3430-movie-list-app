@@ -46,7 +46,10 @@ export default function MovieReviews({list, movie}) {
             return value
           }))
           actions.resetForm({values: {comment: ''}})
-          toast.success(`Successfully submitted!`)
+
+          toast.success(`Successfully posted`, {onClose: () => {
+            document.location = `/movie_lists/${list.id}/movies/${movie.id}`
+          }})
       }).catch((error) => {
         toast.error(`Failed to submit review.`)
       });

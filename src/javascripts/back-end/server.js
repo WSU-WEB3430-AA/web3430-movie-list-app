@@ -1,10 +1,6 @@
 let path = require('path')
 require('dotenv').config()
 
-// // To make async/await calls work
-// import "core-js/stable"
-// import "regenerator-runtime/runtime"
-
 // Connect to the database
 import mongoose from "mongoose"
 mongoose.connect(process.env.DB_URL).then(db => {
@@ -33,7 +29,11 @@ app.use(logger('dev'))
 // Static files
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(express.static(path.join(__dirname, '..', '..', '..', 'public')))
+if((process.env.APP_DEPLOYMENT || 'local') === 'heroku'){
+  app.use(express.static(path.join(__dirname, 'public')))
+}else{
+  app.use(express.static(path.join(__dirname, '..', '..', '..', 'public')))
+}
 
 // Sessions
 const session = require('express-session')
