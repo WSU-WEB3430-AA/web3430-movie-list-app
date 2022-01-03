@@ -7,7 +7,6 @@ import { toast } from 'react-toastify'
 import Form from './Form'
 import { Breadcrumbs } from '../pages/Pages'
 import AddableMoviesForm from './AddableMoviesForm'
-import { FaYoutube } from 'react-icons/fa'
 
 const validationSchema = yup.object({
   year: yup.number().required().min(1900).max(new Date().getFullYear()),
