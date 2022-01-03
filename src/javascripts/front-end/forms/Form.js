@@ -22,13 +22,13 @@ function FieldLabel({name, required}){
   )
 }
 
-function TextField({name, value, required, handleChange, error, type}){
+function TextField({name, value, required, handleChange, error, type, options = {}}){
   if(type === undefined) type = name === "password" ? "password" : "text"
   return (
     <div className="mb-3 row">
       <FieldLabel name={name} required={required} />
       <div className="has-validation col-sm-9">
-        <input className={`form-control ${error ? 'is-invalid' : ''}`} type={type} id={name} value={value} onChange={handleChange}/>
+        <input className={`form-control ${error ? 'is-invalid' : ''}`} type={type} id={name} value={value} onChange={handleChange} {...options}/>
         <VHelp message={error}/>
       </div>
     </div>
@@ -58,18 +58,16 @@ function CheckboxField({name, value, required, setFieldValue, error}){
   )
 }
 
-//TO FINISH
-function SelectField({name, value, required, handleChange, error}){
+function SelectField({name, list, value, required, handleChange, error}){
   return (
     <div className="mb-3 row">
       <FieldLabel name={name} required={required} />
       <div className="has-validation col-sm-9">
-        <select className={`form-control ${error ? 'is-invalid' : ''}`} d={name} value={value} onChange={handleChange}>
-          <option value="">not selected</option>
-          <option value="non-started">not-started</option>
-          <option value="in-progress">in-progress</option>
-          <option value="finished">finished</option>
-          <option value="cancelled">cancelled</option>
+        <select className={`form-select ${error ? 'is-invalid' : ''}`} id={name} value={value} onChange={handleChange}>
+          <option key={0} value="">Not selected</option>
+          {
+            list.map((item, i) => <option key={i + 1} value={item}>{item}</option> )
+          }
         </select>
         <VHelp message={error}/>
       </div>
@@ -97,13 +95,19 @@ export default function Form({title, nav, yup, formik, onCancel, textareas}) {
   for (const [name, schema] of Object.entries(yup.fields)) {
     let value = formik.values[name]
     let error = formik.errors[name]
-    
+    let schema_desc = schema.describe()
+
     switch(schema.type){
       case "number":
+        let [ minTest, ] = schema_desc.tests.filter(t => t.name === 'min')
+        let [ maxTest, ] = schema_desc.tests.filter(t => t.name === 'max')
+        let options = {min: minTest?.params['min'], max: maxTest?.params['max'], step: "0.1"}
+
         fields.push(<TextField key={count} 
                                name={name} type="number" 
                                required={schema.exclusiveTests?.required} 
                                value={value} 
+                               options={options}
                                error={error} 
                                handleChange={formik.handleChange}/>)
         break;
@@ -126,19 +130,27 @@ export default function Form({title, nav, yup, formik, onCancel, textareas}) {
       default:
         if(textareas && textareas[name]){
           fields.push(<TextareaField key={count} 
-            name={name} 
-            value={value} 
-            required={schema.exclusiveTests?.required}
-            error={error} 
-            rows={textareas[name]}
-            handleChange={formik.handleChange}/>)
+                                     name={name} 
+                                     value={value} 
+                                     required={schema.exclusiveTests?.required}
+                                     error={error} 
+                                     rows={textareas[name]}
+                                     handleChange={formik.handleChange}/>)
+        } else if(schema_desc.oneOf?.length > 0){
+          fields.push(<SelectField key={count} 
+                                   name={name} 
+                                   list={schema_desc.oneOf}
+                                   value={value} 
+                                   required={schema.exclusiveTests?.required}
+                                   error={error} 
+                                   handleChange={formik.handleChange}/>)
         } else {
           fields.push(<TextField key={count} 
-                                name={name} 
-                                value={value} 
-                                required={schema.exclusiveTests?.required}
-                                error={error} 
-                                handleChange={formik.handleChange}/>)
+                                 name={name} 
+                                 value={value} 
+                                 required={schema.exclusiveTests?.required}
+                                 error={error} 
+                                 handleChange={formik.handleChange}/>)
         }
     }
 

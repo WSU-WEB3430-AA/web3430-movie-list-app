@@ -31,8 +31,8 @@ export default function Movie(props){
         {/* <h2 className="card-title">{ movie.title}</h2> */}
         <p className="card-text">{ movie.plot }</p>
         <p><strong>Rating</strong>: <StarRating rating={movie.rating}/> { movie.rating }</p>
-        <p><strong>Votes</strong>: <strong>{movie.votes}</strong></p>
-        <p><strong>Rated</strong>: <strong>{movie.rated}</strong></p>
+        <p><strong>Votes</strong>: {movie.votes}</p>
+        <p><strong>Rated</strong>: {movie.rated}</p>
         <p><strong>Genre</strong>: {movie.genre}</p>
         <p><strong>Release date</strong>: {format(movie.releaseDate, "MM/dd/yyyy")}</p>
       </div>

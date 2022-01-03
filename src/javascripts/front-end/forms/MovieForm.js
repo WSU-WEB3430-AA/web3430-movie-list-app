@@ -7,13 +7,20 @@ import { toast } from 'react-toastify'
 import Form from './Form'
 import { Breadcrumbs } from '../pages/Pages'
 import AddableMoviesForm from './AddableMoviesForm'
+import { FaYoutube } from 'react-icons/fa'
 
 const validationSchema = yup.object({
   year: yup.number().required().min(1900).max(new Date().getFullYear()),
   title: yup.string().required(),
   poster: yup.string().url().required(),
   plot: yup.string().required(),
-  releaseDate: yup.date().required()
+  releaseDate: yup.date().required(),
+  genre: yup.string().oneOf([
+    "Action", "Adventure", "Fantasy", "Drama", "Comedy", "Family",
+    "Thriller", "Western" , "Horror", "Musical", "Documentary", "Biography"]).required(),
+  rated: yup.string().oneOf(["G", "PG", "PG-13", "R", "NR"]).required(),
+  rating: yup.number().min(0.0).max(10.0).required(),
+  votes: yup.number().min(0)
 })
 
 export default function MovieForm() {
@@ -34,7 +41,9 @@ export default function MovieForm() {
       poster: "",
       plot: "",
       releaseDate: "",
-      review: ""
+      review: "",
+      votes: 0,
+      rating: 0.0
     } : {...movie}, 
     validationSchema,
     onSubmit(values){
