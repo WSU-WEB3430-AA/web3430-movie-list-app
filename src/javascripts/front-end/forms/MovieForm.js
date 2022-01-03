@@ -16,8 +16,10 @@ const validationSchema = yup.object({
   plot: yup.string().required(),
   releaseDate: yup.date().required(),
   genre: yup.string().oneOf([
-    "Action", "Adventure", "Fantasy", "Drama", "Comedy", "Family",
-    "Thriller", "Western" , "Horror", "Musical", "Documentary", "Biography"]).required(),
+    "Action", "Adventure", "Fantasy", "Drama", "Comedy", 
+    "Family", "Science Fiction", "Romance", "Animation", "History",
+    "Thriller", "Western" , "Horror", "Musical", "Documentary", 
+    "Biography", "Mystery"]).required(),
   rated: yup.string().oneOf(["G", "PG", "PG-13", "R", "NR"]).required(),
   rating: yup.number().min(0.0).max(10.0).required(),
   votes: yup.number().min(0)
