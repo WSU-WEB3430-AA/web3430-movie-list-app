@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import {format} from 'date-fns'
 import { DeleteModal } from '../forms/DeleteModal'
 import { MovieListsContext } from '../App'
-import StarRating, { Breadcrumbs, UnifiedPageHeader } from '../pages/Pages'
+import StarRating, { Breadcrumbs, UnifiedPageHeader } from './Pages'
 import MovieReviews from '../forms/MovieReviews'
 
 export default function Movie(props){

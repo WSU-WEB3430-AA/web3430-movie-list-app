@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { MovieListsContext } from '../App'
 import ListItem from './ListItem'
-import { UnifiedPageHeader } from '../pages/Pages'
+import { UnifiedPageHeader } from './Pages'
 import { APP_SETTINGS } from '../config/settings'
 
 export default function Lists(props) {
