@@ -1,63 +1,66 @@
-let path = require('path')
-require('dotenv').config()
+let path = require("path")
+require("dotenv").config()
 
 // Connect to the database
 import mongoose from "mongoose"
-mongoose.connect(process.env.DB_URL).then(db => {
-  console.log(`Connected to ${db.connections[0].name}`)
-}).catch(err => {
-  console.log(err)
-})
+mongoose
+  .connect(process.env.DB_URL)
+  .then((db) => {
+    console.log(`Connected to ${db.connections[0].name}`)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 
 // Creating the application
-let express = require('express')
+let express = require("express")
 export let app = express()
 
 // App security
-const helmet = require("helmet");
+const helmet = require("helmet")
 // app.use(helmet({ contentSecurityPolicy: false }))
 // View templates
-import manifest from '../../../public/manifest.json'
+import manifest from "../../../public/manifest.json"
 app.locals.app_title = "Movie Lists App"
-app.locals._js_asset_filename = '/' + Object.values(manifest)[0]['file']
-app.locals._css_asset_filename = '/' + Object.values(manifest)[0]['css'][0]
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
+app.locals._js_asset_filename = "/" + Object.values(manifest)[0]["file"]
+app.locals._css_asset_filename = "/" + Object.values(manifest)[0]["css"][0]
+app.set("views", path.join(__dirname, "views"))
+app.set("view engine", "pug")
 
 // Logger
-let logger = require('morgan')
-app.use(logger('dev'))
+let logger = require("morgan")
+app.use(logger("dev"))
 
 // Static files
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-if((process.env.APP_DEPLOYMENT || 'local') === 'heroku'){
-  app.use(express.static(path.join(__dirname, 'public')))
-}else{
-  app.use(express.static(path.join(__dirname, '..', '..', '..', 'public')))
+if ((process.env.APP_DEPLOYMENT || "local") === "heroku") {
+  app.use(express.static(path.join(__dirname, "public")))
+} else {
+  app.use(express.static(path.join(__dirname, "..", "..", "..", "public")))
 }
 
 // Sessions
-const session = require('express-session')
+const session = require("express-session")
 app.use(
   session({
     secret: process.env.APP_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
   })
 )
 
 // Authentication
-import passport from 'passport'
-import { User } from './models/users'
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+import passport from "passport"
+import { User } from "./models/users"
+passport.use(User.createStrategy())
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 app.use(passport.initialize())
 app.use(passport.session())
 
 // Routing
-import { configureRoutes } from './routes'
+import { configureRoutes } from "./routes"
 configureRoutes(app)
 
 // Handling errors
@@ -69,28 +72,28 @@ app.use((req, res, next) => {
 })
 // Error handler
 app.use((err, req, res, next) => {
-  if (!err.status || err.status == '') {
+  if (!err.status || err.status == "") {
     err.status = 500
   }
   res.status(err.status || 500)
-  res.render('error', { err })
+  res.render("error", { err })
 })
 
 //Starting the server
 let server = require("http").createServer(app)
-let port = process.env.PORT || '8080'
-server.on('error', err => {
-  if (err.syscall !== 'listen') {
+let port = process.env.PORT || "8080"
+server.on("error", (err) => {
+  if (err.syscall !== "listen") {
     throw err
   }
 
   switch (err.code) {
-    case 'EACCES':
+    case "EACCES":
       console.error(`Port ${port} requires elevated privileges`)
       process.exit(1)
-    case 'EADDRINUSE':
+    case "EADDRINUSE":
       console.error(`Port ${port} is already in use`)
-      process.exit(1);
+      process.exit(1)
     default:
       throw err
   }

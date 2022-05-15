@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
-const passportLocalMongoose = require('passport-local-mongoose');
+import mongoose from "mongoose"
+const passportLocalMongoose = require("passport-local-mongoose")
 
 const Schema = mongoose.Schema
 
@@ -8,15 +8,15 @@ let userSchema = new Schema({
     type: String,
     unique: true,
     required: true,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    trim: true
+    trim: true,
   },
-  password: String
+  password: String,
 })
 
 userSchema.plugin(passportLocalMongoose)
@@ -29,13 +29,13 @@ let profileSchema = new Schema({
   name: {
     family: { type: String, required: true, trim: true },
     given: { type: String, required: true, trim: true },
-    middle: { type: String, trim: true }
+    middle: { type: String, trim: true },
   },
-  avatar: String
+  avatar: String,
 })
 
-profileSchema.virtual('fullName').get(function () {
-  return this.name.family + ', ' + this.name.given
+profileSchema.virtual("fullName").get(function () {
+  return this.name.family + ", " + this.name.given
 })
 
 export let User = mongoose.model("User", userSchema)

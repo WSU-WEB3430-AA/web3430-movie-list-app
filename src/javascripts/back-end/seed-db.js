@@ -1,89 +1,91 @@
-let path = require('path')
-require('dotenv').config()
+let path = require("path")
+require("dotenv").config()
 
 // Connect to the database
 import mongoose from "mongoose"
 import { List, Movie } from "./models/movie_lists"
 console.log(process.env.DB_URL)
-mongoose.connect(process.env.DB_URL).then(db => {
-  console.log(`Connected to ${db.connections[0].name}`)
-}).catch(err => {
-  console.log(err)
-})
+mongoose
+  .connect(process.env.DB_URL)
+  .then((db) => {
+    console.log(`Connected to ${db.connections[0].name}`)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 
 import { top10 } from "../front-end/config/top10"
 import { Profile, User } from "./models/users"
 
 // STEP 1: Create a user
-console.log('STEP 1: Creating the user')
+console.log("STEP 1: Creating the user")
 let user = new User({
-  username: 'ww',
-  email: 'ww@example.com'
+  username: "ww",
+  email: "ww@example.com",
 })
 
-User.register(user, 'ww', async function (err, user) {
+User.register(user, "ww", async function (err, user) {
   if (err) {
     console.log(err)
   } else {
     await new Profile({
       user,
-      provider: 'local',
-      displayName: 'Williams, Will',
-      name: { family: 'Williams', given: 'Will' }
+      provider: "local",
+      displayName: "Williams, Will",
+      name: { family: "Williams", given: "Will" },
     }).save()
-    console.log('....... DONE!')
+    console.log("....... DONE!")
 
     // STEP 2: Add the top 10 IMDB movies
-    console.log('STEP 2: Adding the top 10 IMDB movies')
+    console.log("STEP 2: Adding the top 10 IMDB movies")
     for (let m of top10) {
       let movie = new Movie({
-        "title": m.title,
-        "year": m.year,
-        "rated": m.rated,
-        "genre": m.genre,
-        "plot": m.plot,
-        "poster": m.poster,
-        "rating": m.rating,
-        "votes": m.votes,
-        "releaseDate": m.releaseDate,
+        title: m.title,
+        year: m.year,
+        rated: m.rated,
+        genre: m.genre,
+        plot: m.plot,
+        poster: m.poster,
+        rating: m.rating,
+        votes: m.votes,
+        releaseDate: m.releaseDate,
         addedBy: user,
         addedAt: new Date(),
         updatedAt: new Date(),
-        "reviews": []
+        reviews: [],
       })
 
       await movie.save()
     }
-    console.log('....... DONE!')
+    console.log("....... DONE!")
 
     // STEP 3: Create a list containing the top 10 IMDB movies
-    console.log('STEP 3: Creating a list containing the top 10 IMDB movies')
+    console.log("STEP 3: Creating a list containing the top 10 IMDB movies")
 
-    Movie.find().exec().then(movies => {
-      let list = new List({
-        title: 'Top 10 IMDB Movies',
-        description: 'Top 10 IMDB movies of all time as rated by regular IMDB voters.',
-        owner: user,
-        public: true,
-        votes: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        movies: movies
-      })
+    Movie.find()
+      .exec()
+      .then((movies) => {
+        let list = new List({
+          title: "Top 10 IMDB Movies",
+          description:
+            "Top 10 IMDB movies of all time as rated by regular IMDB voters.",
+          owner: user,
+          public: true,
+          votes: 0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          movies: movies,
+        })
 
-      list.save(err => {
-        if (err) {
-          console.log(err)
-        }
-        console.log('....... DONE!')
+        list.save((err) => {
+          if (err) {
+            console.log(err)
+          }
+          console.log("....... DONE!")
+        })
       })
-    })
   }
 })
-
-
-
-
 
 // Movie.find().exec().then(movies=> {
 //    let list = new List({

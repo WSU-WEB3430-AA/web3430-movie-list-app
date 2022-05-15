@@ -1,40 +1,43 @@
-const path = require('path')
-const glob = require('glob')
+const path = require("path")
+const glob = require("glob")
 
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import eslint from '@rollup/plugin-eslint'
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import eslint from "@rollup/plugin-eslint"
 
 let input = {}
 
-glob.sync('./src/**/*.html').map(file => {
-  return [file.substring(`.${path.sep}src${path.sep}`.length), file]
-}).forEach( f => {
+glob
+  .sync("./src/**/*.html")
+  .map((file) => {
+    return [file.substring(`.${path.sep}src${path.sep}`.length), file]
+  })
+  .forEach((f) => {
     input[f[0]] = f[1]
-})
+  })
 
 export default defineConfig({
-  root: 'src',
+  root: "src",
   build: {
     manifest: true,
-    outDir: '../public',
+    outDir: "../public",
     emptyOutDir: true,
     rollupOptions: {
-      input: path.resolve(__dirname, 'src/javascripts/front-end/main.jsx')
-    }
+      input: path.resolve(__dirname, "src/javascripts/front-end/main.jsx"),
+    },
   },
   server: {
     port: 8080,
-    open: '/movie_lists'
+    open: "/movie_lists",
   },
-  plugins: [  
+  plugins: [
     {
       ...eslint({
-        include: ['src/**/*.js', 'src/**/*.jsx']
+        include: ["src/**/*.js", "src/**/*.jsx"],
       }),
-      enforce: 'pre',
-      apply: 'build'
+      enforce: "pre",
+      apply: "build",
     },
-    react()
-  ]
+    react(),
+  ],
 })
