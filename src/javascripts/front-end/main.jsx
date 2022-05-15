@@ -1,6 +1,10 @@
-import 'bootstrap'
+// Import SCSS/CSS files. Here. Don't worrry! Vite will sperate CSS from 
+// JavaScript when it bundles the app.
+import '../../stylesheets/main.scss'
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
+
+import 'bootstrap'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'

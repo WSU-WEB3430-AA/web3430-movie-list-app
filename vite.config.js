@@ -20,12 +20,12 @@ export default defineConfig({
     outDir: '../public',
     emptyOutDir: true,
     rollupOptions: {
-      input
+      input: path.resolve(__dirname, 'src/javascripts/front-end/main.jsx')
     }
   },
   server: {
     port: 8080,
-    open: true
+    open: '/movie_lists'
   },
   plugins: [  
     {

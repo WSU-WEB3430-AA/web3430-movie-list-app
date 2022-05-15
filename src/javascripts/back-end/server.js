@@ -16,14 +16,11 @@ export let app = express()
 // App security
 const helmet = require("helmet");
 // app.use(helmet({ contentSecurityPolicy: false }))
-
 // View templates
-// const manifest = await import(`${process.env.APP_DEPLOYMENT === 'heroku' ? './public' : '../../../public'}/manifest.json`) 
 import manifest from '../../../public/manifest.json'
-
 app.locals.app_title = "Movie Lists App"
-app.locals._js_asset_filename = manifest['index.html']['file']
-app.locals._css_asset_filename = manifest['index.html']['css'][0]
+app.locals._js_asset_filename = '/' + Object.values(manifest)[0]['file']
+app.locals._css_asset_filename = '/' + Object.values(manifest)[0]['css'][0]
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 

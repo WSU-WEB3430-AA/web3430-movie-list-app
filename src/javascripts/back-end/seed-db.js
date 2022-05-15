@@ -21,10 +21,10 @@ let user = new User({
   email: 'ww@example.com'
 })
 
-User.register(user, 'ww', async function(err, user) { 
-  if (err) { 
+User.register(user, 'ww', async function (err, user) {
+  if (err) {
     console.log(err)
-  }else{ 
+  } else {
     await new Profile({
       user,
       provider: 'local',
@@ -35,14 +35,14 @@ User.register(user, 'ww', async function(err, user) {
 
     // STEP 2: Add the top 10 IMDB movies
     console.log('STEP 2: Adding the top 10 IMDB movies')
-    for(let m of top10){
+    for (let m of top10) {
       let movie = new Movie({
         "title": m.title,
         "year": m.year,
         "rated": m.rated,
         "genre": m.genre,
         "plot": m.plot,
-        "poster":m.poster,
+        "poster": m.poster,
         "rating": m.rating,
         "votes": m.votes,
         "releaseDate": m.releaseDate,
@@ -52,14 +52,14 @@ User.register(user, 'ww', async function(err, user) {
         "reviews": []
       })
 
-     await movie.save()
+      await movie.save()
     }
     console.log('....... DONE!')
 
     // STEP 3: Create a list containing the top 10 IMDB movies
     console.log('STEP 3: Creating a list containing the top 10 IMDB movies')
 
-    Movie.find().exec().then(movies=> {
+    Movie.find().exec().then(movies => {
       let list = new List({
         title: 'Top 10 IMDB Movies',
         description: 'Top 10 IMDB movies of all time as rated by regular IMDB voters.',
@@ -70,15 +70,15 @@ User.register(user, 'ww', async function(err, user) {
         updatedAt: new Date(),
         movies: movies
       })
-    
-      list.save(err =>{
-        if(err){
+
+      list.save(err => {
+        if (err) {
           console.log(err)
         }
         console.log('....... DONE!')
       })
     })
-  } 
+  }
 })
 
 
