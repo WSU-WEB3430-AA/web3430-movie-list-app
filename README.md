@@ -38,5 +38,5 @@ Visit http://localhost:8080/ in the browser to view your application.
 **NOTE**: To compile the front-end components in a production mode, use the command:
 
 ```bash
-NODE_ENV=production npm run build
+npm run build
 ```
