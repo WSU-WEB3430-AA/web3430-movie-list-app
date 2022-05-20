@@ -28,11 +28,7 @@ export function Profile() {
         </h1>
       </div>
       <div className="flex-grow-1 ms-5">
-        <UnifiedPageHeader
-          title={profile.displayName}
-          start_sz={10}
-          end_sz={2}
-        />
+        <UnifiedPageHeader title={profile.displayName} start_sz={10} end_sz={2} />
         <p>
           <strong>Email</strong>: {profile.username}{" "}
         </p>

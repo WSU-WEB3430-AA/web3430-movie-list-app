@@ -12,6 +12,7 @@ export const allMovieListsAPI = (req, res, next) => {
         results.push({
           doc: list,
           editable: req.user?._id.toHexString() === list.owner.toHexString(),
+          userDisplayName: req.session.user_profile?.displayName,
         })
       }
 
@@ -27,10 +28,7 @@ export const allMovieListsAPI = (req, res, next) => {
 // GET /api/movie_lists/:lid
 export const oneMovieListAPI = (req, res, next) => {
   List.findOne({
-    $and: [
-      { _id: req.params.lid },
-      { $or: [{ public: true }, { owner: req.user?._id }] },
-    ],
+    $and: [{ _id: req.params.lid }, { $or: [{ public: true }, { owner: req.user?._id }] }],
   })
     .populate("movies")
     .exec()

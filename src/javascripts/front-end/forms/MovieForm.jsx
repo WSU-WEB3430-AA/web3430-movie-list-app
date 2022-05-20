@@ -7,6 +7,7 @@ import { toast } from "react-toastify"
 import Form from "./Form"
 import { Breadcrumbs } from "../pages/Pages"
 import AddableMoviesForm from "./AddableMoviesForm"
+import { useCookies } from "react-cookie"
 
 const validationSchema = yup.object({
   year: yup.number().required().min(1900).max(new Date().getFullYear()),
@@ -42,10 +43,10 @@ const validationSchema = yup.object({
 })
 
 export default function MovieForm() {
-  let { movies, currentList, authenticated, setAuthenticated } =
-    useContext(MovieListsContext)
+  let { movies, currentList } = useContext(MovieListsContext)
+  const [cookies] = useCookies(["authenticated"])
 
-  if (!authenticated) {
+  if (!cookies.authenticated === "true") {
     document.location = "/signin"
     return <></>
   }
@@ -53,52 +54,46 @@ export default function MovieForm() {
   let { mid, lid } = useParams()
   let movie = mid ? movies.find((m) => m.id == mid) : {}
   let is_new = mid === undefined
-  const { handleSubmit, handleChange, values, errors, setFieldValue } =
-    useFormik({
-      initialValues: is_new
-        ? {
-            year: new Date().getFullYear(),
-            title: "",
-            poster: "",
-            plot: "",
-            releaseDate: "",
-            review: "",
-            votes: 0,
-            rating: 0.0,
-          }
-        : { ...movie },
-      validationSchema,
-      onSubmit(values) {
-        fetch(
-          `/api/movie_lists/${currentList.id}/movies${
-            is_new ? "" : "/" + movie.id
-          }`,
-          {
-            method: is_new ? "POST" : "PUT",
-            headers: {
-              "Content-Type": "application/json",
+  const { handleSubmit, handleChange, values, errors, setFieldValue } = useFormik({
+    initialValues: is_new
+      ? {
+          year: new Date().getFullYear(),
+          title: "",
+          poster: "",
+          plot: "",
+          releaseDate: "",
+          review: "",
+          votes: 0,
+          rating: 0.0,
+        }
+      : { ...movie },
+    validationSchema,
+    onSubmit(values) {
+      fetch(`/api/movie_lists/${currentList.id}/movies${is_new ? "" : "/" + movie.id}`, {
+        method: is_new ? "POST" : "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(values),
+      })
+        .then((response) => {
+          if (!response.ok) throw Error(response.statusText)
+        })
+        .then(() => {
+          toast.success(`Successfully ${is_new ? "created" : "updated"}`, {
+            onClose: () => {
+              document.location = is_new
+                ? `/movie_lists/${currentList.id}/movies`
+                : `/movie_lists/${currentList.id}/movies/${movie.id}`
             },
-            credentials: "same-origin",
-            body: JSON.stringify(values),
-          }
-        )
-          .then((response) => {
-            if (!response.ok) throw Error(response.statusText)
           })
-          .then(() => {
-            toast.success(`Successfully ${is_new ? "created" : "updated"}`, {
-              onClose: () => {
-                document.location = is_new
-                  ? `/movie_lists/${currentList.id}/movies`
-                  : `/movie_lists/${currentList.id}/movies/${movie.id}`
-              },
-            })
-          })
-          .catch((error) => {
-            toast.error(`Failed to submit your message`)
-          })
-      },
-    })
+        })
+        .catch((err) => {
+          toast.error(`Failed to submit your message: ${err.message}`)
+        })
+    },
+  })
 
   return (
     <>

@@ -42,10 +42,7 @@ export default function Movies() {
         extra={
           <div className="row">
             <div className="col d-grid">
-              <select
-                className="form-select"
-                onChange={(e) => sortBy(e.target.value)}
-              >
+              <select className="form-select" onChange={(e) => sortBy(e.target.value)}>
                 <option defaultValue="">Sort movies by:</option>
                 <option value="title">Title</option>
                 <option value="releaseDate">Release date</option>
@@ -53,10 +50,7 @@ export default function Movies() {
               </select>
             </div>
             <div className="col d-grid">
-              <Link
-                to={`/movie_lists/${currentList.id}/movies/new`}
-                className="btn btn-primary"
-              >
+              <Link to={`/movie_lists/${currentList.id}/movies/new`} className="btn btn-primary">
                 <FaPlus /> Add new movie
               </Link>
             </div>
@@ -85,17 +79,10 @@ export default function Movies() {
       <nav className="d-flex justify-content-center">
         <ul className="pagination">
           {movies.length > 0 ? (
-            Array.from(
-              Array(
-                Math.ceil(movies.length / APP_SETTINGS.items_per_page)
-              ).keys()
-            ).map((p) => {
+            Array.from(Array(Math.ceil(movies.length / APP_SETTINGS.items_per_page)).keys()).map((p) => {
               return (
-                <li
-                  key={p}
-                  className={p == page ? "page-item active" : "page-item"}
-                >
-                  <a className="page-link" onClick={(e) => changePage(p)}>
+                <li key={p} className={p == page ? "page-item active" : "page-item"}>
+                  <a className="page-link" onClick={() => changePage(p)}>
                     {p + 1}
                   </a>
                 </li>

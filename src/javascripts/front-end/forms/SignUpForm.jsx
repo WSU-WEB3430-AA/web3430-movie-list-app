@@ -13,39 +13,38 @@ const validationSchema = yup.object({
 })
 
 export default function SignUpForm() {
-  const { handleSubmit, handleChange, values, errors, setFieldValue } =
-    useFormik({
-      initialValues: {
-        firstName: "",
-        lastName: "",
-        username: "",
-        password: "",
-      },
-      validationSchema,
-      onSubmit(values) {
-        fetch("/api/users/signup", {
-          method: "POST", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "same-origin",
-          body: JSON.stringify(values),
+  const { handleSubmit, handleChange, values, errors, setFieldValue } = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      username: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit(values) {
+      fetch("/api/users/signup", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(values),
+      })
+        .then((response) => {
+          if (!response.ok) throw Error("Failed to sign in")
         })
-          .then((response) => {
-            if (!response.ok) throw Error("Failed to sign in")
+        .then(() => {
+          toast.success(`Successfully submitted`, {
+            onClose: () => {
+              document.location = "/movie_lists"
+            },
           })
-          .then(() => {
-            toast.success(`Successfully submitted`, {
-              onClose: () => {
-                document.location = "/movie_lists"
-              },
-            })
-          })
-          .catch((err) => {
-            toast.error(err.message)
-          })
-      },
-    })
+        })
+        .catch((err) => {
+          toast.error(err.message)
+        })
+    },
+  })
 
   return (
     <Form

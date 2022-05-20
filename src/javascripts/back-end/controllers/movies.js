@@ -3,18 +3,14 @@ import { List, Movie } from "../models/movie_lists"
 // GET /api/movie_lists/:lid/movies
 export const allMovieListMoviesAPI = (req, res, next) => {
   List.findOne({
-    $and: [
-      { _id: req.params.lid },
-      { $or: [{ public: true }, { owner: req.user?._id }] },
-    ],
+    $and: [{ _id: req.params.lid }, { $or: [{ public: true }, { owner: req.user?._id }] }],
   })
     .populate("movies")
     .exec()
     .then((list) => {
       let results = []
       for (let movie of list.movies) {
-        let editable =
-          req.user?._id.toHexString() === movie.addedBy.toHexString()
+        let editable = req.user?._id.toHexString() === movie.addedBy.toHexString()
         results.push({ doc: movie, editable })
       }
       res.write(
@@ -34,10 +30,7 @@ export const allMovieListMoviesAPI = (req, res, next) => {
 // GET /api/movie_lists/:lid/addable_movies
 export const allMoviesNotInMovieLisAPI = (req, res, next) => {
   List.findOne({
-    $and: [
-      { _id: req.params.lid },
-      { $or: [{ public: true }, { owner: req.user?._id }] },
-    ],
+    $and: [{ _id: req.params.lid }, { $or: [{ public: true }, { owner: req.user?._id }] }],
   })
     .exec()
     .then(async (list) => {

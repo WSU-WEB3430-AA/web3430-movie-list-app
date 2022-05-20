@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react"
 import { Outlet } from "react-router-dom"
 import { MovieListsContext } from "../App"
 
-export default function ListsGetter(props) {
+export default function ListsGetter() {
   const { lists, setLists } = useContext(MovieListsContext)
 
   useEffect(() => {

@@ -1,10 +1,9 @@
 import React, { useEffect, useContext } from "react"
-import { Outlet, useNavigate, useParams } from "react-router-dom"
+import { Outlet, useParams } from "react-router-dom"
 import { MovieListsContext } from "../App"
 
 export default function MoviesGetter() {
-  const { movies, setMovies, currentList, setCurrentList } =
-    useContext(MovieListsContext)
+  const { movies, setMovies, currentList, setCurrentList } = useContext(MovieListsContext)
   let { lid } = useParams()
   useEffect(() => {
     fetch(`/api/movie_lists/${lid}/movies`, {

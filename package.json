@@ -6,13 +6,15 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
-    "start": "vite",
+    "clean": "rimraf public",
+    "start": "npm run dev",
     "build": "vite build",
     "deploy": "vite build --watch --mode development",
     "preview": "vite preview",
     "lint": "eslint --ext .js,.jsx --ignore-path .gitignore --fix src",
-    "format": "prettier .  --write",
-    "server": "npx nodemon --watch ./src/javascripts/back-end/ --watch ./public/ --delay  2500ms ./src/javascripts/back-end/server.js --exec babel-node",
+    "format": "prettier src --write",
+    "dev": "vite",
+    "server": "npx nodemon --watch ./src/javascripts/back-end/ --watch ./public/ --delay 2500ms ./src/javascripts/back-end/server.js --exec babel-node",
     "db": "npx babel-node ./src/javascripts/back-end/seed-db.js"
   },
   "devDependencies": {
@@ -26,6 +28,7 @@
     "glob": "^7.2.0",
     "nodemon": "^2.0.16",
     "prettier": "^2.6.2",
+    "prop-types": "^15.8.1",
     "rimraf": "^3.0.2",
     "sass": "^1.49.11",
     "vite": "^2.9.0"

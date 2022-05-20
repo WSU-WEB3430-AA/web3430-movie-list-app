@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react"
 import { FaPlus } from "react-icons/fa"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { MovieListsContext } from "../App"
 import ListItem from "./ListItem"
 import { UnifiedPageHeader } from "./Pages"
 import { APP_SETTINGS } from "../config/settings"
 
-export default function Lists(props) {
+export default function Lists() {
   let [page, setPage] = useState(0)
   const { lists } = useContext(MovieListsContext)
   const changePage = (p) => setPage(p)
@@ -33,15 +33,10 @@ export default function Lists(props) {
       </div>
       <nav className="d-flex justify-content-center">
         <ul className="pagination">
-          {Array.from(
-            Array(Math.ceil(lists.length / APP_SETTINGS.items_per_page)).keys()
-          ).map((p) => {
+          {Array.from(Array(Math.ceil(lists.length / APP_SETTINGS.items_per_page)).keys()).map((p) => {
             return (
-              <li
-                key={p}
-                className={p == page ? "page-item active" : "page-item"}
-              >
-                <a className="page-link" onClick={(e) => changePage(p)}>
+              <li key={p} className={p == page ? "page-item active" : "page-item"}>
+                <a className="page-link" onClick={() => changePage(p)}>
                   {p + 1}
                 </a>
               </li>

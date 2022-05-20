@@ -35,8 +35,8 @@ export default function AddableMoviesForm({ lid }) {
           },
         })
       })
-      .catch((error) => {
-        toast.error(`Failed to submit your message`)
+      .catch((err) => {
+        toast.error(`Failed to submit your message: ${err.message}`)
       })
   }
 
@@ -53,23 +53,14 @@ export default function AddableMoviesForm({ lid }) {
   return (
     <form id="addable-movies">
       <div className="mx-5 mb-3 row">
-        <UnifiedPageHeader
-          title={"Or add existing movies"}
-          start_sz={11}
-          end_sz={1}
-        />
+        <UnifiedPageHeader title={"Or add existing movies"} start_sz={11} end_sz={1} />
         <table className="table align-middle">
           <tbody>
             {addables.movies.map((movie, i) => {
               return (
                 <tr key={i}>
                   <td>
-                    <img
-                      src={movie.poster}
-                      alt={movie.title}
-                      className="img-fluid"
-                      width="40"
-                    />
+                    <img src={movie.poster} alt={movie.title} className="img-fluid" width="40" />
                   </td>
                   <td>{movie.title}</td>
                   <td>

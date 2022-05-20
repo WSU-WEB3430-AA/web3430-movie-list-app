@@ -10,8 +10,7 @@ function FieldLabel({ name, required }) {
   let title = ""
   for (let i = 0; i < name.length; i++) {
     if (i === 0) title += name[i].toUpperCase()
-    else if (name[i] === name[i].toUpperCase())
-      title += " " + name[i].toLowerCase()
+    else if (name[i] === name[i].toUpperCase()) title += " " + name[i].toLowerCase()
     else if (name[i] === "_") title += " "
     else title += name[i]
   }
@@ -26,15 +25,7 @@ function FieldLabel({ name, required }) {
   )
 }
 
-function TextField({
-  name,
-  value,
-  required,
-  handleChange,
-  error,
-  type,
-  options = {},
-}) {
+function TextField({ name, value, required, handleChange, error, type, options = {} }) {
   if (type === undefined) type = name === "password" ? "password" : "text"
   return (
     <div className="mb-3 row">
@@ -72,7 +63,7 @@ function TextareaField({ name, value, required, handleChange, error, rows }) {
   )
 }
 
-function CheckboxField({ name, value, required, setFieldValue, error }) {
+function CheckboxField({ name, value, required, setFieldValue }) {
   return (
     <div className="mb-3 row">
       <FieldLabel name={name} required={required} />
@@ -97,12 +88,7 @@ function SelectField({ name, list, value, required, handleChange, error }) {
     <div className="mb-3 row">
       <FieldLabel name={name} required={required} />
       <div className="has-validation col-sm-9">
-        <select
-          className={`form-select ${error ? "is-invalid" : ""}`}
-          id={name}
-          value={value}
-          onChange={handleChange}
-        >
+        <select className={`form-select ${error ? "is-invalid" : ""}`} id={name} value={value} onChange={handleChange}>
           <option key={0} value="">
             Not selected
           </option>
@@ -146,7 +132,7 @@ export default function Form({ title, nav, yup, formik, onCancel, textareas }) {
     let schema_desc = schema.describe()
 
     switch (schema.type) {
-      case "number":
+      case "number": {
         let [minTest] = schema_desc.tests.filter((t) => t.name === "min")
         let [maxTest] = schema_desc.tests.filter((t) => t.name === "max")
         let options = {
@@ -168,6 +154,7 @@ export default function Form({ title, nav, yup, formik, onCancel, textareas }) {
           />
         )
         break
+      }
       case "date":
         fields.push(
           <DateField
@@ -236,13 +223,7 @@ export default function Form({ title, nav, yup, formik, onCancel, textareas }) {
 
   return (
     <div className="mx-5">
-      <UnifiedPageHeader
-        title={title}
-        start_sz={6}
-        end_sz={6}
-        extra={nav}
-        extra_cls={"breadcrumb-end"}
-      />
+      <UnifiedPageHeader title={title} start_sz={6} end_sz={6} extra={nav} extra_cls={"breadcrumb-end"} />
       <form onSubmit={formik.handleSubmit}>
         {fields}
 
@@ -252,11 +233,7 @@ export default function Form({ title, nav, yup, formik, onCancel, textareas }) {
               Submit
             </button>
             {onCancel && (
-              <button
-                type="button"
-                className="btn btn-danger me-2"
-                onClick={onCancel}
-              >
+              <button type="button" className="btn btn-danger me-2" onClick={onCancel}>
                 Cancel
               </button>
             )}

@@ -5,7 +5,7 @@ import { MovieListsContext } from "../App"
 import { DeleteModal } from "../forms/DeleteModal"
 
 export default function ListItem({ list }) {
-  const { currentList, setCurrentList } = useContext(MovieListsContext)
+  const { setCurrentList } = useContext(MovieListsContext)
   let navigate = useNavigate()
   const selectList = () => {
     setCurrentList({ id: list.id, title: list.title })
@@ -14,17 +14,10 @@ export default function ListItem({ list }) {
 
   let ownerActions = list.editable ? (
     <>
-      <Link
-        to={`/movie_lists/${list.id}/edit`}
-        className="btn btn-secondary me-2"
-      >
+      <Link to={`/movie_lists/${list.id}/edit`} className="btn btn-secondary me-2">
         Edit list
       </Link>
-      <a
-        className="btn btn-danger me-2"
-        data-bs-toggle="modal"
-        data-bs-target={`#deleteMovieModal_${list.id}`}
-      >
+      <a className="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target={`#deleteMovieModal_${list.id}`}>
         Delete
       </a>
     </>

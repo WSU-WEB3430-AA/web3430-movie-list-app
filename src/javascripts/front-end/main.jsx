@@ -8,12 +8,7 @@ import "bootstrap"
 import React from "react"
 import ReactDOM from "react-dom"
 import App from "./App"
-import ContactForm from "./forms/ContactForm"
-import SignInForm from "./forms/SignInForm"
 import SignOut from "./forms/SignOut"
-import SignUpForm from "./forms/SignUpForm"
-import { AboutUs } from "./pages/Pages"
-import { Profile } from "./pages/Profile"
 import { toast } from "react-toastify"
 
 toast.configure()
@@ -24,41 +19,6 @@ if (document.querySelector("#main")) {
       <App />
     </React.StrictMode>,
     document.querySelector("#main")
-  )
-} else if (document.querySelector("#contact")) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <ContactForm />
-    </React.StrictMode>,
-    document.querySelector("#contact")
-  )
-} else if (document.querySelector("#aboutus")) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <AboutUs />
-    </React.StrictMode>,
-    document.querySelector("#aboutus")
-  )
-} else if (document.querySelector("#signin")) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <SignInForm />
-    </React.StrictMode>,
-    document.querySelector("#signin")
-  )
-} else if (document.querySelector("#signup")) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <SignUpForm />
-    </React.StrictMode>,
-    document.querySelector("#signup")
-  )
-} else if (document.querySelector("#profile")) {
-  ReactDOM.render(
-    <React.StrictMode>
-      <Profile />
-    </React.StrictMode>,
-    document.querySelector("#profile")
   )
 }
 

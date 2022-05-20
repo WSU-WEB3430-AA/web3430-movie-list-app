@@ -6,6 +6,7 @@ import * as yup from "yup"
 import { toast } from "react-toastify"
 import Form from "./Form"
 import { Breadcrumbs } from "../pages/Pages"
+import { useCookies } from "react-cookie"
 
 const validationSchema = yup.object({
   title: yup.string().required(),
@@ -14,9 +15,10 @@ const validationSchema = yup.object({
 })
 
 export default function ListForm() {
-  let { lists, authenticated } = useContext(MovieListsContext)
+  let { lists } = useContext(MovieListsContext)
+  const [cookies] = useCookies(["authenticated"])
 
-  if (!authenticated) {
+  if (!cookies.authenticated === "true") {
     document.location = "/signin"
     return <></>
   }
@@ -24,45 +26,42 @@ export default function ListForm() {
   let { lid } = useParams()
   let list = lid ? lists.find((l) => l.id == lid) : {}
   let is_new = lid === undefined
-  const { handleSubmit, handleChange, values, errors, setFieldValue } =
-    useFormik({
-      initialValues: is_new
-        ? {
-            title: "",
-            description: "",
-            public: false,
-          }
-        : { ...list },
-      validationSchema,
-      onSubmit(values) {
-        fetch(`/api/movie_lists${is_new ? "" : "/" + list.id}`, {
-          method: is_new ? "POST" : "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "same-origin",
-          body: JSON.stringify(values),
+  const { handleSubmit, handleChange, values, errors, setFieldValue } = useFormik({
+    initialValues: is_new
+      ? {
+          title: "",
+          description: "",
+          public: false,
+        }
+      : { ...list },
+    validationSchema,
+    onSubmit(values) {
+      fetch(`/api/movie_lists${is_new ? "" : "/" + list.id}`, {
+        method: is_new ? "POST" : "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(values),
+      })
+        .then((response) => {
+          if (!response.ok) throw Error(response.statusText)
         })
-          .then((response) => {
-            if (!response.ok) throw Error(response.statusText)
+        .then(() => {
+          toast.success(`Successfully ${is_new ? "created" : "updated"}`, {
+            onClose: () => {
+              document.location = "/movie_lists"
+            },
           })
-          .then(() => {
-            toast.success(`Successfully ${is_new ? "created" : "updated"}`, {
-              onClose: () => {
-                document.location = "/movie_lists"
-              },
-            })
-          })
-          .catch((error) => {
-            toast.error(`Failed to submit your message`)
-          })
-      },
-    })
+        })
+        .catch((err) => {
+          toast.error(`Failed to submit your message: ${err.message}`)
+        })
+    },
+  })
   return (
     <Form
-      title={
-        is_new ? "Adding a new movie list" : `Editing an existing movie list`
-      }
+      title={is_new ? "Adding a new movie list" : `Editing an existing movie list`}
       nav={!is_new ? <Breadcrumbs list={list} page="edit" /> : ""}
       yup={validationSchema}
       formik={{ handleSubmit, handleChange, values, errors, setFieldValue }}

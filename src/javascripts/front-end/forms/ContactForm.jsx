@@ -11,35 +11,34 @@ const validationSchema = yup.object({
 })
 
 export default function ContactForm() {
-  const { handleSubmit, handleChange, values, errors, setFieldValue } =
-    useFormik({
-      initialValues: {
-        name: "",
-        email: "",
-        message: "",
-      },
-      validationSchema,
-      onSubmit(values) {
-        fetch("/api/contact", {
-          method: "POST", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "same-origin",
-          body: JSON.stringify(values),
+  const { handleSubmit, handleChange, values, errors, setFieldValue } = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
+    validationSchema,
+    onSubmit(values) {
+      fetch("/api/contact", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(values),
+      })
+        .then(() => {
+          toast.success(`Successfully submitted`, {
+            onClose: () => {
+              document.location = "/movie_lists"
+            },
+          })
         })
-          .then(() => {
-            toast.success(`Successfully submitted`, {
-              onClose: () => {
-                document.location = "/movie_lists"
-              },
-            })
-          })
-          .catch((error) => {
-            toast.error(`Failed to submit your message`)
-          })
-      },
-    })
+        .catch((err) => {
+          toast.error(`Failed to submit your message: ${err.message}`)
+        })
+    },
+  })
 
   return (
     <Form

@@ -5,9 +5,11 @@ import { DeleteModal } from "../forms/DeleteModal"
 import { MovieListsContext } from "../App"
 import StarRating, { Breadcrumbs, UnifiedPageHeader } from "./Pages"
 import MovieReviews from "../forms/MovieReviews"
+import { useCookies } from "react-cookie"
 
-export default function Movie(props) {
-  let { movies, currentList, authenticated } = useContext(MovieListsContext)
+export default function Movie() {
+  let { movies, currentList } = useContext(MovieListsContext)
+  const [cookies] = useCookies(["authenticated"])
   let { mid } = useParams()
   let movie = mid ? movies.find((m) => m.id == mid) : {}
 
@@ -19,29 +21,17 @@ export default function Movie(props) {
         start_sz={9}
         end_sz={3}
         extra={
-          authenticated &&
+          cookies.authenticated === "true" &&
           movie.editable && (
             <div className="row">
               <div className="col d-grid">
-                <Link
-                  to={`/movie_lists/${currentList.id}/movies/${movie.id}/edit`}
-                  className="btn btn-secondary"
-                >
+                <Link to={`/movie_lists/${currentList.id}/movies/${movie.id}/edit`} className="btn btn-secondary">
                   Edit
                 </Link>
               </div>
               <div className="col d-grid">
-                <DeleteModal
-                  index={movie.id}
-                  list={currentList}
-                  movie={movie}
-                  page={movie.title}
-                ></DeleteModal>
-                <a
-                  data-bs-toggle="modal"
-                  data-bs-target={`#deleteMovieModal_${movie.id}`}
-                  className="btn btn-danger"
-                >
+                <DeleteModal index={movie.id} list={currentList} movie={movie} page={movie.title}></DeleteModal>
+                <a data-bs-toggle="modal" data-bs-target={`#deleteMovieModal_${movie.id}`} className="btn btn-danger">
                   Delete
                 </a>
               </div>
@@ -51,16 +41,11 @@ export default function Movie(props) {
       />
 
       <div className="clearfix mt-4">
-        <img
-          src={movie.poster}
-          className="ms-2 w-25 float-end"
-          alt={movie.title}
-        />
+        <img src={movie.poster} className="ms-2 w-25 float-end" alt={movie.title} />
         {/* <h2 className="card-title">{ movie.title}</h2> */}
         <p className="card-text">{movie.plot}</p>
         <p>
-          <strong>Rating</strong>: <StarRating rating={movie.rating} />{" "}
-          {movie.rating}
+          <strong>Rating</strong>: <StarRating rating={movie.rating} /> {movie.rating}
         </p>
         <p>
           <strong>Votes</strong>: {movie.votes}
@@ -72,8 +57,7 @@ export default function Movie(props) {
           <strong>Genre</strong>: {movie.genre}
         </p>
         <p>
-          <strong>Release date</strong>:{" "}
-          {format(movie.releaseDate, "MM/dd/yyyy")}
+          <strong>Release date</strong>: {format(movie.releaseDate, "MM/dd/yyyy")}
         </p>
       </div>
 

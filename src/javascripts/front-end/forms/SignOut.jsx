@@ -1,8 +1,10 @@
 import React from "react"
 import Avatar from "react-avatar"
+import { useCookies } from "react-cookie"
 import { toast } from "react-toastify"
 
 export default function SignOut({ displayName }) {
+  const [cookies, setCookie] = useCookies(["authenticated"])
   const signUserOut = () => {
     fetch("/api/users/signout", {
       method: "DELETE", // or 'PUT'
@@ -11,7 +13,11 @@ export default function SignOut({ displayName }) {
       },
       credentials: "same-origin",
     })
-      .then((data) => {
+      .then((response) => {
+        if (!response.ok) {
+          throw Error("Unable to sign out")
+        }
+        setCookie("authenticated", "false", { path: "/" })
         toast.success(`Successfully logged out`, {
           onClose: () => {
             document.location = "/movie_lists"
@@ -45,6 +51,8 @@ export default function SignOut({ displayName }) {
       </ul>
     </>
   )
-
-  //<a className="dropdown-item" onClick={signUserOut}>Sign out</a>
 }
+
+// SignOut.propTypes = {
+//   displayName: PropTypes.string.isRequired,
+// }

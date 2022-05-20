@@ -1,24 +1,8 @@
 import express from "express"
+let path = require("path")
 
-import {
-  contactPage,
-  aboutPage,
-  indexPage,
-  signInPage,
-  signUpPage,
-  profilePage,
-} from "./controllers/pages"
-import {
-  signUserUpAPI,
-  signUserInAPI,
-  signUserOutAPI,
-  currentUserProfileAPI,
-} from "./controllers/users"
-import {
-  allContactsAPI,
-  closeContactAPI,
-  newContactAPI,
-} from "./controllers/contacts"
+import { signUserUpAPI, signUserInAPI, signUserOutAPI, currentUserProfileAPI } from "./controllers/users"
+import { allContactsAPI, closeContactAPI, newContactAPI } from "./controllers/contacts"
 import {
   allMovieListsAPI,
   createMovieListAPI,
@@ -57,32 +41,18 @@ function requireSignIn(req, res, next) {
 export function configureRoutes(app) {
   app.all("*", async (req, res, next) => {
     app.locals.signedIn = isSignedIn(req)
+    res.cookie("display-name", "-1")
     if (isSignedIn(req)) {
       if (!req.session.user_profile) {
         req.session.user_profile = await Profile.findOne({
           user: req.user,
         }).exec()
       }
-      app.locals.displayName = req.session.user_profile.displayName
+      res.cookie("display-name", req.session.user_profile.displayName)
     }
     res.cookie("authenticated", app.locals.signedIn)
     next()
   })
-
-  /*****************************************************************************
-   * Section 1: Rendered pages
-   ****************************************************************************/
-  // Rendered Pages
-  router.get("", (req, res) => res.redirect(301, "/movie_lists"))
-  router.get("/about", aboutPage)
-  router.get("/contact", contactPage)
-
-  router.get("/signin", signInPage)
-  router.get("/signup", signUpPage)
-  router.get("/profile", profilePage)
-
-  router.get("/movie_lists*", indexPage)
-  router.get("/movie_lists/:lid/movies", indexPage)
 
   /*****************************************************************************
    * Section 1: API endpoints
@@ -110,27 +80,18 @@ export function configureRoutes(app) {
   router.get("/api/movie_lists/:lid/movies/:mid", oneMovieListMovieAPI)
   router.get("/api/movie_lists/:lid/addable_movies", allMoviesNotInMovieLisAPI)
   router.post("/api/movie_lists/:lid/movies", requireSignIn, createMovieAPI)
-  router.put(
-    "/api/movie_lists/:lid/movies/add",
-    requireSignIn,
-    addMoviesToListAPI
-  )
+  router.put("/api/movie_lists/:lid/movies/add", requireSignIn, addMoviesToListAPI)
   router.put("/api/movie_lists/:lid/movies/:mid", requireSignIn, updateMovieAPI)
-  router.delete(
-    "/api/movie_lists/:lid/movies/:mid",
-    requireSignIn,
-    deleteMovieAPI
-  )
-  router.delete(
-    "/api/movie_lists/:lid/movies/:mid/remove",
-    requireSignIn,
-    removeMovieFromListAPI
-  )
-  router.post(
-    "/api/movie_lists/:lid/movies/:mid/review",
-    requireSignIn,
-    reviewMovieAPI
-  )
+  router.delete("/api/movie_lists/:lid/movies/:mid", requireSignIn, deleteMovieAPI)
+  router.delete("/api/movie_lists/:lid/movies/:mid/remove", requireSignIn, removeMovieFromListAPI)
+  router.post("/api/movie_lists/:lid/movies/:mid/review", requireSignIn, reviewMovieAPI)
+
+  /*****************************************************************************
+   * Section 2: All other requests or page refreshes return index.html
+   ****************************************************************************/
+  router.get("/*", (req, res) => {
+    res.sendFile(path.resolve(__dirname + "/../../../public/index.html"))
+  })
 
   app.use("/", router)
 }

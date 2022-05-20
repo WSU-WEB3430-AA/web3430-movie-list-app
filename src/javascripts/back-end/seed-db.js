@@ -67,8 +67,7 @@ User.register(user, "ww", async function (err, user) {
       .then((movies) => {
         let list = new List({
           title: "Top 10 IMDB Movies",
-          description:
-            "Top 10 IMDB movies of all time as rated by regular IMDB voters.",
+          description: "Top 10 IMDB movies of all time as rated by regular IMDB voters.",
           owner: user,
           public: true,
           votes: 0,
